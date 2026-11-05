@@ -1,0 +1,22 @@
+ # Mars Map Space Apps
+
+## Proyecto del hackathon
+
+Este proyecto utilizará el dataset de la NASA **“Un conjunto de datos para la conducción autónoma consciente del terreno en Marte”**, disponible en el Portal de Datos Abiertos de la NASA.
+
+### Objetivo
+
+Desarrollar una solución de mapeo y análisis del terreno marciano que ayude a planificar rutas autónomas más seguras para rovers y futuras misiones de exploración.
+
+### Enfoque
+
+- Analizar las características y los riesgos del terreno marciano.
+- Visualizar mapas y zonas de interés.
+- Identificar rutas transitables para vehículos autónomos.
+- Aplicar criterios de seguridad y conciencia del terreno.
+
+### Fuente de datos
+
+NASA Open Data Portal: dataset para la conducción autónoma consciente del terreno en Marte.
+
+Este repositorio forma parte de la participación en el hackathon **NASA Space Apps Challenge**.
