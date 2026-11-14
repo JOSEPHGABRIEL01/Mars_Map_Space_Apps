@@ -1,23 +1,34 @@
 :root {
-  /* Palette — provisional, aligned with the Figma design later */
-  --color-bg: #050b1f;
-  --color-bg-elevated: #0b1533;
-  --color-surface: #101d42;
-  --color-border: #1e2f5c;
-  --color-text: #e8f0ff;
-  --color-text-muted: #9fb0d0;
-  --color-accent: #2f6bff;
-  --color-accent-strong: #1f4fd8;
-  --color-cyan: #35e0f2;
-  --color-success: #38d39f;
-  --color-warning: #f5b942;
-  --color-danger: #ff5c7a;
+  /* BACKGROUNDS */
+  --color-bg: #060B18;
+  --color-bg-elevated: #0B1428;
+  --color-surface: #111E35;
+  --color-surface-hover: #192B49;
 
-  /* Typography */
+  /* BORDERS */
+  --color-border: #243653;
+  --color-border-light: #344968;
+
+  /* TEXT */
+  --color-text: #F0F5FF;
+  --color-text-muted: #9BAEC9;
+  --color-text-subtle: #7185A3;
+
+  /* ACCENTS */
+  --color-accent: #527DFF;
+  --color-accent-strong: #3764E8;
+  --color-cyan: #43D9F2;
+
+  /* STATUS */
+  --color-success: #45D6A0;
+  --color-warning: #F5BD62;
+  --color-danger: #FF7185;
+
+  /* TYPOGRAPHY */
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 
-  /* Spacing scale */
+  /* SPACING */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -27,17 +38,19 @@
   --space-7: 3rem;
   --space-8: 4rem;
 
-  /* Radius */
+  /* RADIUS */
   --radius-sm: 6px;
   --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-lg: 18px;
   --radius-full: 999px;
 
-  /* Layout */
-  --container-max: 1200px;
-  --navbar-height: 64px;
+  /* LAYOUT */
+  --container-max: 1440px;
+  --navbar-height: 76px;
 
-  /* Effects */
-  --shadow-md: 0 8px 24px rgba(2, 8, 24, 0.45);
-  --transition-fast: 160ms ease;
+  /* EFFECTS */
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 24px rgba(67, 217, 242, 0.12);
+
+  --transition-fast: 180ms ease;
 }

@@ -344,3 +344,466 @@
   font-size: 0.75rem;
   text-align: center;
 }
+/* ========================================
+   WORLDS MAP — WELCOME SCREEN/* ======================================== */
+
+
+.welcome {
+  max-width: none;
+  min-height: 650px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.welcomeContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  z-index: 2;
+}
+
+.welcomeEyebrow {
+  color: var(--color-cyan);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.welcomeEyebrow span {
+  padding: 0 0.5rem;
+  color: var(--color-accent);
+}
+
+.welcomeTitle {
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+  max-width: 650px;
+}
+
+.welcomeTitle span {
+  display: block;
+  color: var(--color-cyan);
+}
+
+.welcomeDescription {
+  max-width: 490px;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+.welcomeActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.welcomeButton {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: var(--transition-fast);
+}
+
+.welcomeButton:hover {
+  background: var(--color-accent-strong);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-3px);
+}
+
+.welcomeButton span {
+  font-size: 1.2rem;
+}
+
+.welcomeHint {
+  color: var(--color-text-subtle);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+}
+
+.welcomeStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin: 1.5rem 0 0;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid var(--color-border);
+  list-style: none;
+  width: 100%;
+  max-width: 480px;
+}
+
+.welcomeStats li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.welcomeStats strong {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+}
+
+.welcomeStats span {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+/* Planet illustration */
+
+.welcomeVisual {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+.visualGlow {
+  position: absolute;
+  width: 85%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(47, 107, 255, 0.17),
+    transparent 70%
+  );
+  z-index: -1;
+}
+
+.orbit {
+  position: absolute;
+  width: 90%;
+  height: 55%;
+  border: 1px solid rgba(67, 217, 242, 0.18);
+  border-radius: 50%;
+  transform: rotate(-22deg);
+}
+
+.orbitOne {
+  width: 100%;
+  height: 65%;
+}
+
+.orbitTwo {
+  width: 75%;
+  height: 85%;
+  transform: rotate(55deg);
+}
+
+.moonPlanet,
+.earthPlanet,
+.marsPlanet {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: inset -18px -12px 30px rgba(0, 0, 0, 0.6),
+    0 15px 45px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s ease;
+}
+
+.moonPlanet {
+  width: 105px;
+  height: 105px;
+  left: 4%;
+  top: 25%;
+  background:
+    radial-gradient(circle at 30% 35%, #aeb4bd 0 5%, transparent 6%),
+    radial-gradient(circle at 65% 65%, #777e89 0 9%, transparent 10%),
+    radial-gradient(circle at 45% 70%, #555e6b 0 7%, transparent 8%),
+    radial-gradient(circle at 35% 30%, #a0a6af, #4b5260 75%);
+}
+
+.earthPlanet {
+  width: 245px;
+  height: 245px;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at 30% 40%, #82a66e 0 8%, transparent 9%),
+    radial-gradient(ellipse at 65% 30%, #638c58 0 12%, transparent 13%),
+    radial-gradient(ellipse at 55% 65%, #9baf78 0 10%, transparent 11%),
+    radial-gradient(circle at 35% 30%, #4c9bca, #123e75 65%, #07152c);
+  box-shadow:
+    inset -25px -15px 40px rgba(0, 0, 0, 0.65),
+    0 0 60px rgba(67, 217, 242, 0.22);
+}
+
+.marsPlanet {
+  width: 125px;
+  height: 125px;
+  right: 0;
+  top: 25%;
+  background:
+    radial-gradient(circle at 35% 35%, #d98a65 0 6%, transparent 7%),
+    radial-gradient(circle at 65% 65%, #8f3e2c 0 10%, transparent 11%),
+    radial-gradient(circle at 45% 65%, #a74f36, #612b25 80%);
+}
+
+.moonPlanet span,
+.earthPlanet span,
+.marsPlanet span {
+  position: absolute;
+  top: calc(100% + 18px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+}
+
+.visualCaption {
+  position: absolute;
+  bottom: 2%;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-subtle);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+}
+
+@media (max-width: 850px) {
+  .welcome {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .welcomeContent {
+    align-items: center;
+    text-align: center;
+  }
+
+  .welcomeDescription {
+    max-width: 550px;
+  }
+
+  .welcomeActions {
+    align-items: center;
+  }
+
+  .welcomeStats {
+    justify-content: center;
+  }
+
+  .welcomeVisual {
+    min-height: 380px;
+  }
+
+  .earthPlanet {
+    width: 190px;
+    height: 190px;
+  }
+
+  .moonPlanet {
+    width: 80px;
+    height: 80px;
+  }
+
+  .marsPlanet {
+    width: 95px;
+    height: 95px;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .welcomeTitle {
+    font-size: 2.6rem;
+  }
+
+  .welcomeVisual {
+    min-height: 310px;
+  }
+
+  .earthPlanet {
+    width: 155px;
+    height: 155px;
+  }
+
+  .moonPlanet {
+    width: 65px;
+    height: 65px;
+  }
+
+  .marsPlanet {
+    width: 75px;
+    height: 75px;
+  }
+
+  .welcomeStats {
+    gap: 1.5rem;
+  }
+}
+/* ========================================
+   CELESTIAL BODY SELECTOR
+======================================== */
+
+.bodySection {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.bodyHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.bodyTitle {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: -0.05em;
+}
+
+.bodyTitle span {
+  color: var(--color-cyan);
+}
+
+.celestialGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.celestialCard {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 440px;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: var(--color-bg-elevated);
+  color: white;
+  text-align: left;
+  isolation: isolate;
+  transition: transform 250ms ease, border-color 250ms ease;
+}
+
+.celestialCard:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-cyan);
+}
+
+.celestialImage {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.celestialCard:hover .celestialImage {
+  transform: scale(1.07);
+}
+
+.celestialOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgba(3, 7, 20, 0.98) 0%,
+    rgba(3, 7, 20, 0.65) 42%,
+    rgba(3, 7, 20, 0.05) 100%
+  );
+}
+
+.celestialInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 2rem;
+}
+
+.celestialNumber {
+  color: var(--color-cyan);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.celestialInfo h3 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+.celestialInfo p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.exploreLabel {
+  margin-top: 0.8rem;
+  padding-top: 1rem;
+  width: 100%;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  color: var(--color-cyan);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.bodyFooter {
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-subtle);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .celestialGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .celestialCard {
+    min-height: 350px;
+  }
+
+  .celestialInfo {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .celestialCard {
+    min-height: 300px;
+  }
+}

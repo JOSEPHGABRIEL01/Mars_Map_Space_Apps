@@ -17,6 +17,7 @@
 import { useState } from 'react'
 
 import styles from './App.module.css'
+import EarthMap from './components/EarthMap'
 import {
   CELESTIAL_BODIES,
   DATA_DISCLAIMER,
@@ -163,66 +164,136 @@ export default function App() {
 
 function WelcomeStep({ stats, onStart }) {
   return (
-    <section className={styles.section}>
-      <p className={styles.kicker}>NASA Space Apps Challenge · DEMO</p>
-      <h1 className={styles.title}>Welcome to Worlds Map</h1>
-      <p className={styles.lead}>
-        Find places on Earth that resemble regions of the Moon or Mars. Choose a celestial
-        body, select a region and explore its closest terrestrial analogs.
-      </p>
+    <section className={`${styles.section} ${styles.welcome}`}>
+      <div className={styles.welcomeContent}>
+        <p className={styles.welcomeEyebrow}>
+          NASA SPACE APPS CHALLENGE <span>•</span> DEMO
+        </p>
 
-      <ul className={styles.stats}>
-        <li>
-          <strong>{stats.celestialBodies}</strong> celestial bodies
-        </li>
-        <li>
-          <strong>{stats.regions}</strong> regions
-        </li>
-        <li>
-          <strong>{stats.earthLocations}</strong> Earth analogs
-        </li>
-      </ul>
+        <h1 className={styles.welcomeTitle}>
+          Discover Earth's
+          <span> Other Worlds.</span>
+        </h1>
 
-      <div className={styles.actions}>
-        <button type="button" className={styles.button} onClick={onStart}>
-          Start exploring
-        </button>
+        <p className={styles.welcomeDescription}>
+          Explore terrestrial locations that resemble the landscapes
+          of the Moon and Mars. Discover Earth's hidden analog worlds
+          through science, geography and exploration.
+        </p>
+
+        <div className={styles.welcomeActions}>
+          <button
+            type="button"
+            className={styles.welcomeButton}
+            onClick={onStart}
+          >
+            Start Exploring <span aria-hidden="true">→</span>
+          </button>
+          <span className={styles.welcomeHint}>
+            BEGIN YOUR EXPLORATION
+          </span>
+        </div>
+
+        <ul className={styles.welcomeStats}>
+          <li>
+            <strong>{stats.celestialBodies}</strong>
+            <span>Celestial bodies</span>
+          </li>
+          <li>
+            <strong>{stats.regions}</strong>
+            <span>Regions</span>
+          </li>
+          <li>
+            <strong>{stats.earthLocations}</strong>
+            <span>Earth analogs</span>
+          </li>
+        </ul>
       </div>
 
-      {/* TODO(Etapa 3): replace this block with <WelcomeScreen /> */}
-      <p className={styles.note}>
-        Provisional screen. The final welcome layout, imagery and typography will follow the
-        Figma design.
-      </p>
+      <div
+        className={styles.welcomeVisual}
+        role="img"
+        aria-label="Illustration of the Moon, Earth and Mars in space"
+      >
+        <div className={styles.visualGlow} />
+        <div className={`${styles.orbit} ${styles.orbitOne}`} />
+        <div className={`${styles.orbit} ${styles.orbitTwo}`} />
+
+        <div className={styles.moonPlanet}>
+          <span>MOON</span>
+        </div>
+
+        <div className={styles.earthPlanet}>
+          <span>EARTH</span>
+        </div>
+
+        <div className={styles.marsPlanet}>
+          <span>MARS</span>
+        </div>
+
+        <div className={styles.visualCaption}>
+          <span>01 — 03</span>
+          <span>EXPLORE THE SOLAR SYSTEM</span>
+        </div>
+      </div>
     </section>
   )
 }
 
 function BodyStep({ bodies, onSelect, onBack }) {
   return (
-    <section className={styles.section}>
+    <section className={`${styles.section} ${styles.bodySection}`}>
       <BackButton onBack={onBack} />
 
-      <h2 className={styles.heading}>Select a celestial body</h2>
-      <p className={styles.lead}>
-        Moon and Mars regions are compared with terrestrial environments.
-      </p>
+      <div className={styles.bodyHeader}>
+        <p className={styles.kicker}>WORLDS MAP · EXPLORATION</p>
 
-      {/* TODO(Etapa 4): replace with <CelestialBodySelector /> */}
-      <div className={styles.grid}>
-        {bodies.map((body) => (
+        <h2 className={styles.bodyTitle}>
+          Choose your <span>destination.</span>
+        </h2>
+
+        <p className={styles.lead}>
+          Select a celestial body to discover its landscapes
+          and explore their terrestrial analogs.
+        </p>
+      </div>
+
+      <div className={styles.celestialGrid}>
+        {bodies.map((body, index) => (
           <button
             key={body.id}
             type="button"
-            className={styles.card}
+            className={styles.celestialCard}
             onClick={() => onSelect(body.id)}
           >
-            <img className={styles.cardImage} src={body.image} alt="" />
-            <span className={styles.cardTitle}>{body.name}</span>
-            <span className={styles.muted}>{body.tagline}</span>
+            <img
+              className={styles.celestialImage}
+              src={body.image}
+              alt={body.name}
+            />
+
+            <div className={styles.celestialOverlay} />
+
+            <div className={styles.celestialInfo}>
+              <span className={styles.celestialNumber}>
+                0{index + 1} / 02
+              </span>
+
+              <h3>{body.name}</h3>
+
+              <p>{body.tagline}</p>
+
+              <span className={styles.exploreLabel}>
+                EXPLORE DESTINATION →
+              </span>
+            </div>
           </button>
         ))}
       </div>
+
+      <p className={styles.bodyFooter}>
+        TWO WORLDS · ENDLESS POSSIBILITIES
+      </p>
     </section>
   )
 }
@@ -260,7 +331,14 @@ function RegionStep({ body, regions, onSelect, onBack }) {
   )
 }
 
-function MapStep({ body, region, matches, selectedLocation, onSelectLocation, onBack }) {
+function MapStep({
+  body,
+  region,
+  matches,
+  selectedLocation,
+  onSelectLocation,
+  onBack,
+}) {
   return (
     <section className={styles.section}>
       <BackButton onBack={onBack} />
@@ -268,13 +346,16 @@ function MapStep({ body, region, matches, selectedLocation, onSelectLocation, on
       <p className={styles.kicker}>
         {body.name} · {region.locationLabel}
       </p>
+
       <h2 className={styles.heading}>{region.name}</h2>
+
       <p className={styles.lead}>{region.summary}</p>
 
-      <p className={styles.note}>
-        Provisional results view. The Earth map, PNG background and markers will be added in a
-        later step; this list already uses the same sorted match data.
-      </p>
+      <EarthMap
+        locations={matches}
+        selectedLocationId={selectedLocation?.id}
+        onSelectLocation={onSelectLocation}
+      />
 
       {matches.length === 0 ? (
         <p className={styles.emptyState} role="status">
@@ -282,27 +363,45 @@ function MapStep({ body, region, matches, selectedLocation, onSelectLocation, on
         </p>
       ) : (
         <div className={styles.twoColumns}>
-          {/* TODO(Etapa 5): replace with <SimilarityResults /> */}
           <div>
             <h3 className={styles.subheading}>Earth analogs</h3>
+
             <ul className={styles.gridList}>
               {matches.map((location) => {
-                const isSelected = selectedLocation?.id === location.id
+                const isSelected =
+                  selectedLocation?.id === location.id
+
                 return (
                   <li key={location.id}>
                     <button
                       type="button"
-                      className={`${styles.listButton} ${isSelected ? styles.listButtonActive : ''}`}
+                      className={`${styles.listButton} ${
+                        isSelected ? styles.listButtonActive : ''
+                      }`}
                       aria-pressed={isSelected}
-                      onClick={() => onSelectLocation(location.id)}
+                      onClick={() =>
+                        onSelectLocation(location.id)
+                      }
                     >
                       <span className={styles.scoreRow}>
-                        <span className={styles.cardTitle}>{location.name}</span>
-                        <span className={styles.score}>{formatSimilarity(location.similarity)}</span>
+                        <span className={styles.cardTitle}>
+                          {location.name}
+                        </span>
+
+                        <span className={styles.score}>
+                          {formatSimilarity(location.similarity)}
+                        </span>
                       </span>
-                      <span className={styles.muted}>{location.country}</span>
+
                       <span className={styles.muted}>
-                        {formatCoordinates(location.lat, location.lng)}
+                        {location.country}
+                      </span>
+
+                      <span className={styles.muted}>
+                        {formatCoordinates(
+                          location.lat,
+                          location.lng
+                        )}
                       </span>
                     </button>
                   </li>
@@ -311,19 +410,16 @@ function MapStep({ body, region, matches, selectedLocation, onSelectLocation, on
             </ul>
           </div>
 
-          {/* TODO(Etapa 5): replace with <LocationDetails /> */}
           <LocationPreview location={selectedLocation} />
         </div>
       )}
 
       <p className={styles.note}>
-        {/* TODO(Etapa 6): replace with <CoordinateSearch /> */}
         Manual coordinate analysis will be added in a later step.
       </p>
     </section>
   )
 }
-
 function LocationPreview({ location }) {
   if (!location) return null
 

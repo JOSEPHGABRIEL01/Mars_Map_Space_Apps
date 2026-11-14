@@ -57,7 +57,6 @@ export function getMatchesForRegion(regionId) {
         ...location,
         similarity: match.similarity,
         rationale: match.rationale,
-        region,
       })),
   )
 
