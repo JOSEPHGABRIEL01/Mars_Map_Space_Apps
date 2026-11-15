@@ -60,7 +60,7 @@ class AnalogService:
         data_dir: Path,
         frontend_dir: Path,
         source: str = "auto",
-        candidates_limit: int = 500,
+        candidates_limit: int | None = None,
     ) -> None:
         self.data_dir = Path(data_dir)
         self.frontend_dir = Path(frontend_dir)
@@ -150,10 +150,17 @@ class AnalogService:
 
     def candidates_payload(self) -> dict:
         # Coordinates without a valid pair cannot be placed on the map, but the
-        # record is still returned so the ranking stays complete.
+        # record is still returned so the ranking stays complete. The whole set
+        # is sent by default: the frontend counts and ranks every Earth analog,
+        # and an explicit limit can still bound the payload when needed.
+        candidates = (
+            self.candidates
+            if self.candidates_limit is None
+            else self.candidates[: self.candidates_limit]
+        )
         return {
             "source": self.source_used,
-            "candidates": self.candidates[: self.candidates_limit],
+            "candidates": candidates,
             "total": len(self.candidates),
         }
 

@@ -62,8 +62,8 @@ class ServerTestCase(unittest.TestCase):
         status, _, data = self.json_request("/api/health")
         self.assertEqual(status, 200)
         self.assertEqual(data["status"], "ok")
-        self.assertEqual(data["targets"], 4)
-        self.assertEqual(data["candidates"], 50)
+        self.assertEqual(data["targets"], len(self.httpd.service.targets))
+        self.assertEqual(data["candidates"], len(self.httpd.service.candidates))
         self.assertEqual(data["parameters"], 7)
 
     def test_parameters_catalog(self) -> None:
@@ -76,7 +76,9 @@ class ServerTestCase(unittest.TestCase):
     def test_targets_filter(self) -> None:
         status, _, data = self.json_request("/api/targets?body=Moon")
         self.assertEqual(status, 200)
-        self.assertEqual(len(data["targets"]), 2)
+        expected = core.select_targets(self.httpd.service.targets, "Moon")
+        self.assertGreater(len(expected), 0)
+        self.assertEqual(len(data["targets"]), len(expected))
         self.assertTrue(all(item["Cuerpo"] == "Luna" for item in data["targets"]))
 
     def test_targets_invalid_body(self) -> None:
@@ -87,8 +89,8 @@ class ServerTestCase(unittest.TestCase):
     def test_candidates(self) -> None:
         status, _, data = self.json_request("/api/candidates")
         self.assertEqual(status, 200)
-        self.assertEqual(data["total"], 50)
-        self.assertEqual(len(data["candidates"]), 50)
+        self.assertEqual(data["total"], len(self.httpd.service.candidates))
+        self.assertEqual(len(data["candidates"]), len(self.httpd.service.candidates))
         self.assertIn("Latitud", data["candidates"][0])
 
     def test_analogs_with_preset_target(self) -> None:
@@ -100,7 +102,7 @@ class ServerTestCase(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(data["parameterCount"], 7)
         self.assertEqual(data["totalParameters"], 7)
-        self.assertEqual(len(data["results"]), 50)
+        self.assertEqual(len(data["results"]), len(self.httpd.service.candidates))
         scores = [item["match"]["score"] for item in data["results"]]
         self.assertEqual(scores, sorted(scores, reverse=True))
         self.assertLessEqual(scores[0], 100.0)
@@ -219,7 +221,12 @@ class ServerTestCase(unittest.TestCase):
         status, headers, body = self.request("/data/tierra_procesada.json")
         self.assertEqual(status, 200)
         self.assertIn("json", headers["Content-Type"])
-        self.assertEqual(len(json.loads(body)), 50)
+        expected = json.loads(
+            (core.FRONTEND_DIR / "data" / "tierra_procesada.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(len(json.loads(body)), len(expected))
 
     def test_missing_static_file_is_404(self) -> None:
         status, _, data = self.json_request("/missing-file.js")
