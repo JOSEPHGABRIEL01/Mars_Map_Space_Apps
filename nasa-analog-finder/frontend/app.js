@@ -1271,6 +1271,10 @@ const FALLBACK_TARGETS = [
 
 const ZOOM_TARGET = 6;
 const THEME_STORAGE_KEY = "worlds-map-theme";
+// CARTO serves an empty tile without a key: coastlines only, no land fill. The
+// dark basemap would then read as a blank rectangle, so every dark tile URL
+// carries the project key.
+const CARTO_API_KEY = "cb1_59bd_1_83c56510fe43619d4f363556";
 let PARAM_KEYS = Object.keys(PARAMS);
 
 /* -------------------------------------------------------------------------- */
@@ -1663,12 +1667,15 @@ function initMap() {
   L.control.zoom({ position: "bottomright" }).addTo(map);
 
   baseLayers = {
-    dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd",
-      maxZoom: 20,
-    }),
+    dark: L.tileLayer(
+      `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`,
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: "abcd",
+        maxZoom: 20,
+      },
+    ),
     standard: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -1678,6 +1685,20 @@ function initMap() {
 
   activeBase = theme === "dark" ? baseLayers.dark : baseLayers.standard;
   activeBase.addTo(map);
+
+  // Safety net: if the dark tiles cannot load at all (blocked network, key
+  // revoked), swap in the standard layer so the map never stays blank.
+  let darkTileErrors = 0;
+  baseLayers.dark.on("add", () => {
+    darkTileErrors = 0;
+  });
+  baseLayers.dark.on("tileerror", () => {
+    darkTileErrors += 1;
+    if (darkTileErrors < 4 || !map || activeBase !== baseLayers.dark) return;
+    map.removeLayer(baseLayers.dark);
+    baseLayers.standard.addTo(map);
+    activeBase = baseLayers.standard;
+  });
 
   L.control
     .layers(
