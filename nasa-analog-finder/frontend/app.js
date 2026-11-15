@@ -35202,6 +35202,7 @@ let targets = [],
   allRanked = [],
   markers = null,
   map = null;
+const CARTO_API_KEY = "cb1_59bd_1_83c56510fe43619d4f363556";
 function calcularSimilitud(site, target) {
   let weighted = 0,
     totalWeight = 0;
@@ -35248,9 +35249,12 @@ function refreshMap() {
 }
 function initMap() {
   map = L.map("map", { worldCopyJump: true }).setView([20, 0], 2);
-  const dark = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution: "© OpenStreetMap © CARTO",
-    }).addTo(map),
+  const dark = L.tileLayer(
+      `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`,
+      {
+        attribution: "© OpenStreetMap © CARTO",
+      },
+    ).addTo(map),
     standard = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",
     });
