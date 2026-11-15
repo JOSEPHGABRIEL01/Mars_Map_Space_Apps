@@ -1,4 +1,8 @@
 import L from "leaflet";
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/inter";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
 import targetData from "./data/objetivos_espaciales.json";
 import earthData from "./data/tierra_procesada.json";
 
@@ -1488,15 +1492,14 @@ function applyTheme(next, { persist = true } = {}) {
   theme = next === "light" ? "light" : "dark";
   document.documentElement.dataset.theme = theme;
 
-  const toggle = $("#theme-toggle");
-  if (toggle) {
+  document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
     toggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
     toggle.setAttribute("aria-pressed", String(theme === "dark"));
     toggle.setAttribute(
       "aria-label",
       `Switch to ${theme === "dark" ? "light" : "dark"} mode`,
     );
-  }
+  });
 
   // Keep the map readable in both themes: swap the CARTO dark layer for the
   // standard OpenStreetMap layer. The layer control stays in sync because
@@ -2151,6 +2154,32 @@ async function loadData() {
 function updateCount() {
   const count = $("#candidate-count");
   if (count) count.textContent = `· ${earth.length} sites`;
+
+  const worlds = new Set(targets.map((item) => item.Cuerpo).filter(Boolean));
+  const pad = (value) => String(value).padStart(2, "0");
+
+  const worldCount = $("#hero-world-count");
+  if (worldCount) worldCount.textContent = pad(worlds.size || 2);
+
+  const targetCount = $("#hero-target-count");
+  if (targetCount) targetCount.textContent = pad(targets.length);
+
+  const earthCount = $("#hero-earth-count");
+  if (earthCount) earthCount.textContent = String(earth.length);
+
+  // The landing cards describe the bundled targets today, but the lists are
+  // derived from the dataset so new reference sites appear without editing the
+  // markup.
+  document.querySelectorAll("[data-target-list]").forEach((node) => {
+    const names = targets
+      .filter((item) => item.Cuerpo === node.dataset.targetList)
+      .map((item) => item.Sitio)
+      .filter(Boolean);
+    if (!names.length) return;
+    const shown = names.slice(0, 3).join(" · ");
+    const extra = names.length > 3 ? ` · +${names.length - 3}` : "";
+    node.textContent = `Targets: ${shown}${extra}`;
+  });
 }
 
 function bindRankingList() {
@@ -2186,19 +2215,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   await initBackend();
   await loadData();
 
+  function openWorld(world) {
+    $("#welcome")?.classList.add("hidden");
+    $("#app")?.classList.remove("hidden");
+    if (!map) initMap();
+    setWorld(world);
+    refreshMap();
+    setTimeout(refreshMap, 250);
+  }
+
   document.querySelectorAll("[data-world]").forEach((button) => {
-    button.addEventListener("click", () => {
-      $("#welcome").classList.add("hidden");
-      $("#app").classList.remove("hidden");
-      if (!map) initMap();
-      setWorld(button.dataset.world);
-      refreshMap();
-      setTimeout(refreshMap, 250);
+    button.addEventListener("click", () => openWorld(button.dataset.world));
+  });
+
+  $("#start-exploring")?.addEventListener("click", () => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    $("#worlds")?.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "start",
     });
   });
 
-  $("#theme-toggle")?.addEventListener("click", () => {
-    applyTheme(theme === "dark" ? "light" : "dark");
+  document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      applyTheme(theme === "dark" ? "light" : "dark");
+    });
   });
 
   $("#target-select")?.addEventListener("change", (event) => {
