@@ -39,6 +39,11 @@
       <aside id="mission-menu" class="mission-menu">
         <label>Mission Target <span>(Reference Site)</span></label
         ><select id="target-select"></select
+        ><label class="result-limit-label" for="result-limit">Visible analogs</label
+        ><select id="result-limit">
+          <option value="50">Top 50</option>
+          <option value="100">Top 100</option>
+          <option value="all">All places</option></select
         ><button id="custom-target" class="custom">＋ Custom Target</button
         ><button id="ranking-button" class="ranking-button">▤ View Analog Ranking</button>
       </aside>
@@ -75,9 +80,9 @@
           <label
             >Show
             <select id="ranking-limit">
-              <option value="5">Top 5</option>
-              <option value="10" selected>Top 10</option>
-              <option value="50">All candidates</option>
+              <option value="50" selected>Top 50</option>
+              <option value="100">Top 100</option>
+              <option value="all">All places</option>
             </select></label
           ><span id="ranking-summary" class="muted"></span>
         </div>

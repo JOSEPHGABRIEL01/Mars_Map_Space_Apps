@@ -160,6 +160,10 @@ body {
 .mission-menu label span {
   color: var(--accent);
 }
+.result-limit-label {
+  display: block;
+  margin-top: 10px;
+}
 select {
   width: 100%;
   background: var(--panel2);
@@ -260,6 +264,15 @@ h2 {
   font-size: 11px;
   color: var(--muted);
   margin-top: 18px;
+}
+.specialist-badge {
+  margin: 14px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  color: #ffe0ad;
+  background: #5a3b1422;
+  font-size: 12px;
 }
 .legend {
   position: absolute;
@@ -417,6 +430,10 @@ input {
 }
 .ranking-row:hover {
   background: #ffffff08;
+}
+.specialist-row {
+  border-left: 3px solid var(--gold);
+  padding-left: 2px;
 }
 .rank-number {
   color: var(--gold);

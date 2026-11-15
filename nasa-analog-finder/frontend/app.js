@@ -58,6 +58,13 @@ const PARAMS = {
     weight: 1.3,
   },
 };
+const SPECIALIST_PARAMS = [
+  "Temp_Min(C°)",
+  "Amplitud_termica_(Delta_T)",
+  "Pendiente°",
+  "Polvo/aerosoles",
+  "Azufres_Sulfatos",
+];
 const FALLBACK_TARGETS = [
     {
       Sitio: "South Pole",
@@ -1077,6 +1084,7 @@ let targets = [],
   activeWorld = "Luna",
   activeTarget = null,
   ranked = [],
+  allRanked = [],
   markers = null,
   map = null;
 function calcularSimilitud(site, target) {
@@ -1104,10 +1112,16 @@ function calcularSimilitud(site, target) {
     weighted += score * meta.weight;
     totalWeight += meta.weight;
   }
+  const best = SPECIALIST_PARAMS.filter((key) => desglose[key])
+    .map((key) => [key, desglose[key]])
+    .sort((a, b) => b[1].similitud - a[1].similitud)[0];
   return {
     total: totalWeight ? Math.round((weighted / totalWeight) * 10) / 10 : 0,
     desglose,
     evaluados: Object.keys(desglose).length,
+    mejorParametroUnico: best ? best[0] : null,
+    mejorSimilitudUnica: best ? best[1].similitud : 0,
+    esEspecialista: Boolean(best && best[1].similitud >= 92),
   };
 }
 function targetFor(world) {
@@ -1140,9 +1154,35 @@ function setWorld(world) {
   rankAndRender();
 }
 function rankAndRender() {
-  ranked = earth
+  allRanked = earth
     .map((site) => ({ ...site, match: calcularSimilitud(site, activeTarget) }))
     .sort((a, b) => b.match.total - a.match.total);
+  const requestedLimit = document.querySelector("#result-limit")?.value || "50";
+  const limit = requestedLimit === "all" ? allRanked.length : Number(requestedLimit);
+  const integralSlots = Math.ceil(limit * 0.8);
+  const specialistSlots = limit - integralSlots;
+  const integral = allRanked
+    .slice(0, integralSlots)
+    .map((site) => ({ ...site, match: { ...site.match, tipoAnalogico: "integral" } }));
+  const selected = new Set(integral.map((site) => `${site.Latitud},${site.Longitud}`));
+  const specialists = allRanked
+    .filter(
+      (site) => site.match.esEspecialista && !selected.has(`${site.Latitud},${site.Longitud}`),
+    )
+    .sort((a, b) => b.match.mejorSimilitudUnica - a.match.mejorSimilitudUnica)
+    .slice(0, specialistSlots)
+    .map((site) => ({ ...site, match: { ...site.match, tipoAnalogico: "especialista" } }));
+  const selectedSites = [...integral, ...specialists];
+  if (selectedSites.length < limit) {
+    const already = new Set(selectedSites.map((site) => `${site.Latitud},${site.Longitud}`));
+    selectedSites.push(
+      ...allRanked
+        .filter((site) => !already.has(`${site.Latitud},${site.Longitud}`))
+        .slice(0, limit - selectedSites.length)
+        .map((site) => ({ ...site, match: { ...site.match, tipoAnalogico: "integral" } })),
+    );
+  }
+  ranked = selectedSites;
   renderMarkers();
   if (ranked[0]) showDetail(ranked[0]);
   renderRanking();
@@ -1154,13 +1194,13 @@ function renderMarkers() {
   ranked.forEach((site, index) => {
     const icon = L.divIcon({
       className: "candidate-marker",
-      html: `<span style="display:block;background:#ff5964;width:${index < 10 ? 14 : 10}px;height:${index < 10 ? 14 : 10}px;border:2px solid white;border-radius:50%;box-shadow:0 2px 6px #0008"></span>`,
+      html: `<span style="display:block;background:${site.match.tipoAnalogico === "especialista" ? "#ffbf69" : "#ff5964"};width:${index < 10 ? 14 : 10}px;height:${index < 10 ? 14 : 10}px;border:2px solid white;border-radius:50%;box-shadow:0 2px 6px #0008"></span>`,
       iconSize: [16, 16],
       iconAnchor: [8, 8],
     });
     L.marker([site.Latitud, site.Longitud], { icon, title: site.Sitio })
       .bindTooltip(
-        `#${index + 1} · ${site.Sitio}<br><b>${site.match.total.toFixed(1)}%</b> similarity`,
+        `#${index + 1} · ${site.Sitio}<br><b>${site.match.total.toFixed(1)}%</b> similarity${site.match.tipoAnalogico === "especialista" ? `<br>Specialist: ${PARAMS[site.match.mejorParametroUnico].label} ${site.match.mejorSimilitudUnica.toFixed(1)}%` : ""}`,
         { direction: "top" },
       )
       .on("click", () => showDetail(site))
@@ -1184,21 +1224,26 @@ function showDetail(site) {
       .slice(0, 2)
       .map((x) => PARAMS[x[0]].label)
       .join(" and ") || "the available parameters";
+  const specialistBadge =
+    m.tipoAnalogico === "especialista"
+      ? `<div class="specialist-badge"><b>Specialist analog</b><br>${m.mejorSimilitudUnica.toFixed(1)}% match in <strong>${PARAMS[m.mejorParametroUnico].label}</strong>. Ideal for focused engineering or geology tests, even when other parameters differ.</div>`
+      : "";
   document.querySelector("#detail-content").innerHTML =
-    `<div class="detail-inner"><img class="site-image" src="${site.Imagen_URL}" alt="${site.Sitio}" onerror="this.style.display='none'"><p class="eyebrow">CANDIDATE #${ranked.indexOf(site) + 1} ? EARTH CANDIDATE</p><h2>${site.Sitio}</h2><p class="muted">${site.Pais_Region.replace("Antartida", "Antarctica")}<br><span class="coords">${Number(site.Latitud).toFixed(3)}, ${Number(site.Longitud).toFixed(3)}</span></p><div class="score">${m.total.toFixed(1)}%</div><div class="score-label">Weighted similarity ? ${m.evaluados} parameters</div><div class="progress"><i style="width:${m.total}%"></i></div><p class="muted">Compared with <b>${activeTarget.Sitio || "custom target"}</b></p><table class="comparison"><thead><tr><th>Parameter</th><th>Earth</th><th>Target</th><th>Match</th></tr></thead><tbody>${rows}</tbody></table><div class="why"><b>Why is it analogous?</b><p>The strongest matches are ${best}. ${englishEnvironment(site.Tipo_Entorno)} provides a useful field context for planetary research.</p><p class="muted">The analogy has limits: Earth gravity is 1g versus 0.16g on the Moon and 0.38g on Mars. Atmospheric pressure, radiation, and composition also differ.</p></div><div class="refs"><b>References</b><br>${site.Referencias}<br><br><b>Target references</b><br>${activeTarget.Referencias || "User-provided parameters"}</div></div>`;
+    `<div class="detail-inner"><img class="site-image" src="${site.Imagen_URL}" alt="${site.Sitio}" onerror="this.style.display='none'"><p class="eyebrow">CANDIDATE #${ranked.indexOf(site) + 1} · EARTH CANDIDATE</p><h2>${site.Sitio}</h2><p class="muted">${site.Pais_Region.replace("Antartida", "Antarctica")}<br><span class="coords">${Number(site.Latitud).toFixed(3)}, ${Number(site.Longitud).toFixed(3)}</span></p>${specialistBadge}<div class="score">${m.total.toFixed(1)}%</div><div class="score-label">Weighted similarity · ${m.evaluados} parameters</div><div class="progress"><i style="width:${m.total}%"></i></div><p class="muted">Compared with <b>${activeTarget.Sitio || "custom target"}</b></p><table class="comparison"><thead><tr><th>Parameter</th><th>Earth</th><th>Target</th><th>Match</th></tr></thead><tbody>${rows}</tbody></table><div class="why"><b>Why is it analogous?</b><p>The strongest matches are ${best}. ${englishEnvironment(site.Tipo_Entorno)} provides a useful field context for planetary research.</p><p class="muted">The analogy has limits: Earth gravity is 1g versus 0.16g on the Moon and 0.38g on Mars. Atmospheric pressure, radiation, and composition also differ.</p></div><div class="refs"><b>References</b><br>${site.Referencias}<br><br><b>Target references</b><br>${activeTarget.Referencias || "User-provided parameters"}</div></div>`;
   panel.classList.add("open");
 }
 function renderRanking() {
   const list = document.querySelector("#ranking-list");
   if (!list) return;
-  const limit = Number(document.querySelector("#ranking-limit").value || 10);
+  const requestedLimit = document.querySelector("#ranking-limit").value || "50";
+  const limit = requestedLimit === "all" ? ranked.length : Number(requestedLimit);
   document.querySelector("#ranking-summary").textContent =
-    `${ranked.length} candidates · weighted Gaussian distance`;
+    `${ranked.length} visible · ${allRanked.length} evaluated · hybrid global + specialist ranking`;
   list.innerHTML = ranked
     .slice(0, limit)
     .map(
       (s, i) =>
-        `<div class="ranking-row" data-index="${i}"><span class="rank-number">#${i + 1}</span><span class="rank-site"><strong>${s.Sitio}</strong><small>${s.Pais_Region} · ${englishEnvironment(s.Tipo_Entorno)}</small></span><span class="rank-bar"><i style="width:${s.match.total}%"></i></span><span class="rank-score">${s.match.total.toFixed(1)}%</span></div>`,
+        `<div class="ranking-row ${s.match.tipoAnalogico === "especialista" ? "specialist-row" : ""}" data-index="${i}"><span class="rank-number">#${i + 1}</span><span class="rank-site"><strong>${s.Sitio}</strong><small>${s.Pais_Region} · ${englishEnvironment(s.Tipo_Entorno)}${s.match.tipoAnalogico === "especialista" ? ` · Specialist: ${PARAMS[s.match.mejorParametroUnico].label}` : ""}</small></span><span class="rank-bar"><i style="width:${s.match.total}%"></i></span><span class="rank-score">${s.match.total.toFixed(1)}%</span></div>`,
     )
     .join("");
   list.querySelectorAll(".ranking-row").forEach(
@@ -1260,6 +1305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.querySelector("#close-ranking").onclick = () =>
     document.querySelector("#ranking-dialog").close();
   document.querySelector("#ranking-limit").onchange = renderRanking;
+  document.querySelector("#result-limit").onchange = rankAndRender;
   document.querySelector("#custom-form").onsubmit = (e) => {
     if (e.submitter?.id !== "apply-custom") return;
     const form = new FormData(e.target),
