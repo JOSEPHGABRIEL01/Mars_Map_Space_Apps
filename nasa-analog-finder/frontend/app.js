@@ -1447,6 +1447,7 @@ let targets = [],
   baseLayers = null,
   activeBase = null,
   theme = "dark",
+  visibleLimit = "all",
   suppressMarkerClick = false;
 
 const $ = (selector) => document.querySelector(selector);
@@ -1836,6 +1837,10 @@ function highlightRankingSelection() {
 /* Rendering                                                                  */
 /* -------------------------------------------------------------------------- */
 
+function visibleCandidates() {
+  return visibleLimit === "all" ? ranked : ranked.slice(0, Number(visibleLimit));
+}
+
 function renderMarkers() {
   if (!map) return;
 
@@ -1846,7 +1851,9 @@ function renderMarkers() {
 
   markers = L.layerGroup();
 
-  ranked.forEach((site, index) => {
+  const shown = visibleCandidates();
+
+  shown.forEach((site, index) => {
     const isTop = index < 10;
     const size = isTop ? 14 : 10;
     const icon = L.divIcon({
@@ -1885,6 +1892,14 @@ function renderMarkers() {
   markers.addTo(map);
   updateMarkerSelection();
   refreshMap();
+
+  const count = $("#candidate-count");
+  if (count) {
+    count.textContent =
+      shown.length === ranked.length
+        ? `· ${ranked.length} sites`
+        : `· ${shown.length} of ${ranked.length} sites`;
+  }
 }
 
 function matchBarWidth(value) {
@@ -2085,12 +2100,13 @@ function renderRanking() {
   updateTargetFacts();
 
   const limitControl = $("#ranking-limit");
-  const limit = Number(limitControl?.value || 10);
+  const requestedLimit = limitControl?.value || "10";
+  const limit = requestedLimit === "all" ? ranked.length : Number(requestedLimit);
   const summary = $("#ranking-summary");
 
   if (summary) {
     const coverage = targetCoverage(activeTarget);
-    summary.textContent = `${ranked.length} candidates · weighted Gaussian distance · ${coverage} of ${PARAM_KEYS.length} reference parameters`;
+    summary.textContent = `${ranked.length} candidates · ${visibleCandidates().length} shown on map · weighted Gaussian distance · ${coverage} of ${PARAM_KEYS.length} reference parameters`;
   }
 
   if (!ranked.length) {
@@ -2529,6 +2545,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
 
   $("#ranking-limit")?.addEventListener("change", renderRanking);
+
+  $("#result-limit")?.addEventListener("change", (event) => {
+    visibleLimit = event.target.value;
+    renderMarkers();
+    fitCandidates();
+    renderRanking();
+  });
 
   bindRankingList();
 

@@ -75,7 +75,7 @@
         <div class="landing-hero">
           <div class="landing-copy">
             <p class="eyebrow">EARTH ANALOG RESEARCH</p>
-            <h1>Find Earth’s <em>other worlds.</em></h1>
+            <h1>Find other worlds <em>in Earth.</em></h1>
             <p class="landing-lede">
               Compare Moon and Mars reference sites with Earth’s most extreme
               landscapes.
@@ -326,6 +326,26 @@
           </div>
           <p id="target-note" class="target-note" hidden></p>
 
+          <label class="field-label" for="result-limit">Visible analogs</label>
+          <div class="select-shell">
+            <select id="result-limit">
+              <option value="50">Top 50</option>
+              <option value="100">Top 100</option>
+              <option value="500">Top 500</option>
+              <option value="1000">Top 1000</option>
+              <option value="all" selected>All places</option>
+            </select>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="m4 6 4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
           <dl class="target-facts">
             <div class="fact">
               <dt>World</dt>
@@ -417,7 +437,11 @@
               <select id="ranking-limit">
                 <option value="5">Top 5</option>
                 <option value="10" selected>Top 10</option>
-                <option value="50">All candidates</option>
+                <option value="50">Top 50</option>
+                <option value="100">Top 100</option>
+                <option value="500">Top 500</option>
+                <option value="1000">Top 1000</option>
+                <option value="all">All places</option>
               </select>
             </label>
             <span id="ranking-summary" class="muted"></span>
