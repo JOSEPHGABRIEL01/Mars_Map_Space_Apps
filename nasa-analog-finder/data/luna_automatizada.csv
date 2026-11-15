@@ -1,0 +1,21 @@
+Sitio,Tipo,Cuerpo,Latitud,Longitud,Temp_Max(C°),Temp_Min(C°),Amplitud_termica_(Delta_T),Pendiente°,Indice_vegetacion(NDVI),Polvo/aerosoles,Azufres_Sulfatos,Referencias
+South Pole,OBJETO,Luna,-89.9,0.0,-23,-183,160,10.84,0.0,0.0,0.0,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Marius hills,OBJETO,Luna,14.1,-56.8,110,-170,280,0.65,0.0,0.0,0.0,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Shackleton Crater Rim (Artemis Candidate),OBJETO,Luna,-89.54,129.78,-18,-190,172,12.2,0.0,0.15,0.15,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Connecting Ridge (Shackleton-de Gerlache),OBJETO,Luna,-89.45,-137.4,-25,-185,160,8.6,0.0,0.1,0.1,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Nobile Rim 1 (Artemis Candidate),OBJETO,Luna,-85.2,53.5,-20,-175,155,9.4,0.0,0.12,0.12,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Malapert Massif (Artemis Candidate),OBJETO,Luna,-86.0,0.0,-16,-170,154,14.0,0.0,0.08,0.08,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Haworth Crater Floor (PSR - Hielo),OBJETO,Luna,-87.45,-5.17,-30,-220,190,4.8,0.0,0.02,0.05,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Cabeus Crater (LCROSS Impact Site),OBJETO,Luna,-84.9,-35.5,-28,-210,182,7.3,0.0,0.04,0.1,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Aristarchus Plateau,OBJETO,Luna,23.7,-47.4,105,-165,270,6.7,0.0,0.0,0.25,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Mare Tranquillitatis Pit,OBJETO,Luna,8.33,33.22,95,-160,255,1.8,0.0,0.0,0.2,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Mare Tranquillitatis (Apollo 11),OBJETO,Luna,0.67,23.47,105,-170,275,0.9,0.0,0.0,0.2,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Oceanus Procellarum (Apollo 12),OBJETO,Luna,-3.01,-23.42,100,-168,268,1.2,0.0,0.0,0.22,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Fra Mauro Highlands (Apollo 14),OBJETO,Luna,-3.64,-17.47,92,-165,257,3.4,0.0,0.0,0.12,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Hadley-Apennine (Apollo 15),OBJETO,Luna,26.13,3.63,115,-155,270,11.6,0.0,0.0,0.18,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Descartes Highlands (Apollo 16),OBJETO,Luna,-8.97,15.5,90,-160,250,5.2,0.0,0.0,0.05,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Taurus-Littrow Valley (Apollo 17),OBJETO,Luna,20.19,30.77,108,-158,266,7.1,0.0,0.0,0.2,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Tycho Crater Central Peak,OBJETO,Luna,-43.31,-11.36,80,-150,230,18.0,0.0,0.0,0.08,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Copernicus Crater Floor,OBJETO,Luna,9.62,-20.08,98,-165,263,8.4,0.0,0.0,0.1,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Von Karman Crater (Farside),OBJETO,Luna,-44.45,176.3,75,-155,230,3.8,0.0,0.0,0.08,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner
+Peary Crater Rim (North Pole),OBJETO,Luna,88.6,33.0,-25,-185,160,10.5,0.0,0.0,0.08,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA LRO Diviner

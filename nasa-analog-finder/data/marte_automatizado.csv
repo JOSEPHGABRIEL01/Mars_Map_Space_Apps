@@ -1,0 +1,23 @@
+Sitio,Tipo,Cuerpo,Latitud,Longitud,Temp_Max(C°),Temp_Min(C°),Amplitud_termica_(Delta_T),Pendiente°,Indice_vegetacion(NDVI),Polvo/aerosoles,Azufres_Sulfatos,Referencias
+Crater Jezero,OBJETO,Marte,18.38,77.58,-20,-80,60,0.85,0.0,0.55,1.45,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; MGS MOLA / Perseverance MEDA
+Crater Gale,OBJETO,Marte,-5.4,137.8,-10,-75,65,5.65,0.0,0.75,1.75,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; MGS MOLA / Curiosity REMS
+Elysium Planitia (InSight),OBJETO,Marte,4.5,135.6,-8,-78,70,1.1,0.0,0.35,0.9,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Gusev Crater (Spirit),OBJETO,Marte,-14.6,175.5,-12,-82,70,2.8,0.0,0.5,1.1,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Meridiani Planum (Opportunity),OBJETO,Marte,-1.95,-354.5,-15,-85,70,1.2,0.0,0.65,1.4,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Chryse Planitia (Viking 1),OBJETO,Marte,22.5,-47.9,-18,-88,70,0.8,0.0,0.45,0.8,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Utopia Planitia (Viking 2),OBJETO,Marte,47.97,134.25,-25,-100,75,1.4,0.0,0.4,0.7,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Vastitas Borealis (Phoenix),OBJETO,Marte,68.2,234.3,-30,-110,80,0.7,0.0,0.3,0.65,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Arcadia Planitia,OBJETO,Marte,46.7,197.4,-22,-96,74,1.0,0.0,0.35,0.75,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Hellas Planitia,OBJETO,Marte,-42.7,70.0,-5,-75,70,1.8,0.0,0.8,1.7,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Valles Marineris (Coprates Chasma),OBJETO,Marte,-14.0,-60.0,5,-70,75,18.0,0.0,0.85,1.9,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Olympus Mons,OBJETO,Marte,18.65,-133.8,-25,-95,70,4.5,0.0,0.25,0.6,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Arsia Mons (Skylights),OBJETO,Marte,-9.0,-120.5,-18,-84,66,7.5,0.0,0.45,1.0,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Mawrth Vallis,OBJETO,Marte,22.3,-343.5,-12,-82,70,3.2,0.0,0.5,1.8,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Oxia Planum,OBJETO,Marte,18.3,-335.4,-14,-80,66,2.1,0.0,0.55,1.6,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Nili Fossae,OBJETO,Marte,21.0,76.0,-8,-78,70,5.8,0.0,0.65,1.95,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Syrtis Major Planum,OBJETO,Marte,8.4,69.5,-8,-72,64,2.8,0.0,0.7,1.2,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Noctis Labyrinthus,OBJETO,Marte,-7.0,-102.0,0,-70,70,12.0,0.0,0.75,1.65,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Eberswalde Crater,OBJETO,Marte,-23.3,326.7,-5,-72,67,3.5,0.0,0.55,1.5,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Holden Crater,OBJETO,Marte,-26.4,326.0,-2,-74,72,4.2,0.0,0.6,1.7,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Ares Vallis (Pathfinder),OBJETO,Marte,19.1,-33.2,-13,-83,70,2.4,0.0,0.5,1.1,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
+Planum Boreum (Casquete Polar Norte),OBJETO,Marte,85.0,0.0,-35,-115,80,2.0,0.0,0.2,0.6,NASA LRO LOLA / MGS MOLA / LRO Diviner / USGS Astrogeology; USGS Gazetteer / NASA MOLA / CRISM
