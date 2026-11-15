@@ -37,6 +37,18 @@
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
   --marker-ring: rgba(77, 159, 255, 0.26);
   --marker: #6b8096;
+  /* Landing sky */
+  --landing-sky-top: #04070f;
+  --landing-sky-mid: #071323;
+  --landing-sky-bottom: #04060b;
+  --landing-nebula-blue: rgba(58, 122, 220, 0.2);
+  --landing-nebula-violet: rgba(112, 82, 208, 0.12);
+  --landing-nebula-low: rgba(38, 98, 178, 0.1);
+  --landing-scrim: rgba(3, 6, 13, 0.42);
+  --star-dim: rgba(255, 255, 255, 0.24);
+  --star-mid: rgba(224, 238, 255, 0.5);
+  --star-bright: rgba(248, 252, 255, 0.95);
+  --star-glow: rgba(112, 174, 255, 0.26);
   --font-display: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter Variable", Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -75,6 +87,18 @@ html[data-theme="light"] {
   --shadow: 0 24px 65px rgba(10, 21, 34, 0.16);
   --marker-ring: rgba(11, 99, 201, 0.2);
   --marker: #70829a;
+  /* Landing sky */
+  --landing-sky-top: #f4f7fb;
+  --landing-sky-mid: #e9f0f8;
+  --landing-sky-bottom: #f1f5fa;
+  --landing-nebula-blue: rgba(11, 99, 201, 0.1);
+  --landing-nebula-violet: rgba(108, 84, 190, 0.07);
+  --landing-nebula-low: rgba(11, 99, 201, 0.05);
+  --landing-scrim: rgba(255, 255, 255, 0.55);
+  --star-dim: rgba(23, 48, 82, 0.2);
+  --star-mid: rgba(20, 44, 78, 0.34);
+  --star-bright: rgba(11, 63, 128, 0.58);
+  --star-glow: rgba(11, 99, 201, 0.14);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -159,28 +183,230 @@ button {
   min-height: 100dvh;
   overflow: hidden;
   background:
-    radial-gradient(900px 620px at 78% 16%, var(--accent-soft), transparent 62%),
-    radial-gradient(700px 500px at 12% 68%, rgba(255, 255, 255, 0.025), transparent 66%),
-    linear-gradient(180deg, var(--bg-void) 0%, var(--bg) 52%, var(--bg-void) 100%);
+    radial-gradient(
+      ellipse 46% 44% at 22% 42%,
+      var(--landing-scrim),
+      transparent 74%
+    ),
+    radial-gradient(
+      ellipse 62% 52% at 78% 10%,
+      var(--landing-nebula-blue),
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 55% 48% at 14% 62%,
+      var(--landing-nebula-violet),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 70% 38% at 58% 102%,
+      var(--landing-nebula-low),
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      var(--landing-sky-top) 0%,
+      var(--landing-sky-mid) 48%,
+      var(--landing-sky-bottom) 100%
+    );
 }
 
-html[data-theme="light"] .welcome {
-  background:
-    radial-gradient(900px 620px at 78% 16%, var(--accent-soft), transparent 62%),
-    linear-gradient(180deg, var(--bg-void) 0%, var(--bg) 52%, var(--bg-void) 100%);
-}
-
+/* Fine star dust and mid-size stars. Repeating tiles of different star sizes
+   keep the field dense without a visible grid. */
 .welcome::before {
   content: "";
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 72px 72px;
-  opacity: 0.38;
-  mask-image: linear-gradient(to bottom, #000 0%, transparent 72%);
+    radial-gradient(circle at 9% 14%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 23% 7%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 37% 19%, var(--star-dim) 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 52% 11%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 66% 24%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 81% 9%, var(--star-dim) 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 94% 20%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 15% 33%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 31% 44%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 47% 37%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 62% 52%, var(--star-dim) 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 78% 40%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 91% 56%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 7% 61%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 20% 74%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 36% 66%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 53% 80%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 69% 71%, var(--star-dim) 0 0.9px, transparent 1.5px),
+    radial-gradient(circle at 84% 86%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 96% 78%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 12% 91%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 28% 96%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 44% 88%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 59% 97%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 74% 91%, var(--star-dim) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 88% 98%, var(--star-dim) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 18% 21%, var(--star-mid) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 43% 27%, var(--star-mid) 0 1.2px, transparent 2px),
+    radial-gradient(
+      circle at 71% 17%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 2.6px,
+      transparent 4.5px
+    ),
+    radial-gradient(circle at 87% 32%, var(--star-mid) 0 1px, transparent 1.8px),
+    radial-gradient(
+      circle at 26% 57%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 2.6px,
+      transparent 4.5px
+    ),
+    radial-gradient(circle at 57% 63%, var(--star-mid) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 76% 58%, var(--star-mid) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 10% 82%, var(--star-mid) 0 1.1px, transparent 1.9px),
+    radial-gradient(
+      circle at 49% 74%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 2.6px,
+      transparent 4.5px
+    ),
+    radial-gradient(circle at 92% 68%, var(--star-mid) 0 1.2px, transparent 2px);
+  background-repeat: repeat;
+  background-size: 560px 480px;
+  mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    #000 52%,
+    rgba(0, 0, 0, 0.55) 74%,
+    transparent 92%
+  );
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    #000 52%,
+    rgba(0, 0, 0, 0.55) 74%,
+    transparent 92%
+  );
+  opacity: 0.95;
   pointer-events: none;
+}
+
+/* Brighter anchor stars, placed by hand so they frame the copy instead of
+   competing with it. Only the first viewport is populated. */
+.welcome::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 100vh;
+  height: 100dvh;
+  background-image:
+    radial-gradient(
+      circle at 82% 8%,
+      var(--star-bright) 0 1.1px,
+      var(--star-glow) 1.5px 5px,
+      transparent 9px
+    ),
+    radial-gradient(
+      circle at 93% 22%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 4px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 71% 5%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 3.5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 63% 15%,
+      var(--star-bright) 0 1px,
+      var(--star-glow) 1.4px 5px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 97% 41%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 3.5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 79% 32%,
+      var(--star-bright) 0 0.8px,
+      var(--star-glow) 1.2px 3px,
+      transparent 5px
+    ),
+    radial-gradient(
+      circle at 88% 65%,
+      var(--star-bright) 0 1px,
+      var(--star-glow) 1.4px 4.5px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 73% 80%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 3.5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 58% 91%,
+      var(--star-bright) 0 1px,
+      var(--star-glow) 1.4px 4px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 6% 88%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 3.5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 4% 11%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 3px,
+      transparent 5px
+    ),
+    radial-gradient(
+      circle at 49% 5%,
+      var(--star-bright) 0 0.8px,
+      var(--star-glow) 1.2px 3px,
+      transparent 5px
+    ),
+    radial-gradient(
+      circle at 34% 8%,
+      var(--star-bright) 0 0.8px,
+      var(--star-glow) 1.2px 2.5px,
+      transparent 4.5px
+    ),
+    radial-gradient(
+      circle at 24% 94%,
+      var(--star-bright) 0 0.9px,
+      var(--star-glow) 1.3px 3.5px,
+      transparent 6px
+    );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    #000 70%,
+    transparent 98%
+  );
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    #000 70%,
+    transparent 98%
+  );
+  pointer-events: none;
+}
+
+html[data-theme="light"] .welcome::before {
+  opacity: 0.7;
+}
+
+html[data-theme="light"] .welcome::after {
+  opacity: 0.65;
 }
 
 .landing {
