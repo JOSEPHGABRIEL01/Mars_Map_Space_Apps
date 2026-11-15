@@ -227,6 +227,29 @@ const PARAMS = {
   },
 };
 
+/**
+ * Reading order for the site dossier. Parameters added by the backend but not
+ * listed here are still shown in a final "Other parameters" group.
+ */
+const DETAIL_PARAM_GROUPS = [
+  {
+    title: "Thermal environment",
+    keys: [
+      "Temp_Max(C°)",
+      "Temp_Min(C°)",
+      "Amplitud_termica_(Delta_T)",
+    ],
+  },
+  {
+    title: "Terrain & vegetation",
+    keys: ["Pendiente°", "Indice_vegetacion(NDVI)"],
+  },
+  {
+    title: "Atmosphere & chemistry",
+    keys: ["Polvo/aerosoles", "Azufres_Sulfatos"],
+  },
+];
+
 const FALLBACK_TARGETS = [
     {
       Sitio: "South Pole",
@@ -1844,14 +1867,68 @@ function renderMarkers() {
   refreshMap();
 }
 
+function matchBarWidth(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return 0;
+  return Math.max(0, Math.min(100, number));
+}
+
+function detailComparisonRow(key, value) {
+  const meta = PARAMS[key] || { label: key, unit: "" };
+  return `<tr>
+    <td class="param-name">${escapeHtml(meta.label)}${meta.unit ? `<small>${escapeHtml(meta.unit)}</small>` : ""}</td>
+    <td class="param-value">${formatNumber(value.tierra)}</td>
+    <td class="param-value">${formatNumber(value.objetivo)}</td>
+    <td class="param-match">
+      <span class="param-match__bar" aria-hidden="true"><i style="width:${matchBarWidth(value.similitud)}%"></i></span>
+      <b>${Number(value.similitud).toFixed(1)}%</b>
+    </td>
+  </tr>`;
+}
+
+/**
+ * Group the comparison rows into readable scientific categories. Unknown
+ * parameters coming from a newer backend catalog fall into their own group.
+ */
+function detailComparisonGroups(entries) {
+  const remaining = new Map(entries);
+  const groups = [];
+
+  DETAIL_PARAM_GROUPS.forEach(({ title, keys }) => {
+    const rows = keys
+      .filter((key) => remaining.has(key))
+      .map((key) => [key, remaining.get(key)])
+      .sort((a, b) => b[1].similitud - a[1].similitud);
+    rows.forEach(([key]) => remaining.delete(key));
+    if (rows.length) groups.push({ title, rows });
+  });
+
+  const rest = [...remaining.entries()].sort(
+    (a, b) => b[1].similitud - a[1].similitud,
+  );
+  if (rest.length) groups.push({ title: "Other parameters", rows: rest });
+
+  return groups
+    .map(
+      (group) =>
+        `<tr class="param-group-row"><th colspan="4" scope="colgroup">${escapeHtml(group.title)}</th></tr>${group.rows
+          .map(([key, value]) => detailComparisonRow(key, value))
+          .join("")}`,
+    )
+    .join("");
+}
+
 function showDetail(site) {
   const panel = $("#detail-panel");
   const content = $("#detail-content");
   if (!panel || !content) return;
 
   if (!site) {
-    content.innerHTML =
-      '<p class="muted empty-hint">No Earth analog candidates are available for this target.</p>';
+    content.innerHTML = `<div class="dossier-empty">
+      <p class="eyebrow">Site dossier</p>
+      <h2>No candidate available</h2>
+      <p class="muted">No Earth analog candidates are available for this target.</p>
+    </div>`;
     panel.classList.remove("open");
     return;
   }
@@ -1863,12 +1940,7 @@ function showDetail(site) {
     (a, b) => b[1].similitud - a[1].similitud,
   );
 
-  const rows = entries
-    .map(([key, value]) => {
-      const meta = PARAMS[key];
-      return `<tr><td>${meta.label}</td><td>${formatNumber(value.tierra)} ${meta.unit}</td><td>${formatNumber(value.objetivo)} ${meta.unit}</td><td><b>${value.similitud.toFixed(1)}%</b></td></tr>`;
-    })
-    .join("");
+  const rows = detailComparisonGroups(entries);
 
   const strongest = entries
     .slice(0, 2)
@@ -1879,33 +1951,111 @@ function showDetail(site) {
     .join(" and ");
 
   const link = coordinateLink(site);
+  const country = englishCountry(site.Pais_Region);
+  const environment = englishEnvironment(site.Tipo_Entorno);
+  const world = displayWorld(activeWorld);
+  const latitude = formatCoordinate(site.Latitud, "lat");
+  const longitude = formatCoordinate(site.Longitud, "lng");
+  const rankLabel = rank ? `#${rank}` : "—";
+  const rankSummary =
+    rank && ranked.length
+      ? `Rank ${rank} of ${ranked.length}`
+      : "Unranked candidate";
+  const gravityNote =
+    activeWorld === "Marte"
+      ? "Earth gravity is 1g versus 0.38g on Mars."
+      : "Earth gravity is 1g versus 0.16g on the Moon.";
+
+  const media = site.Imagen_URL
+    ? `<div class="dossier-media">
+        <img
+          src="${escapeHtml(site.Imagen_URL)}"
+          alt="${escapeHtml(site.Sitio)} — Earth analog candidate"
+          loading="lazy"
+          decoding="async"
+          onerror="this.closest('.dossier-media').classList.add('is-empty')"
+        >
+        <span class="dossier-badge dossier-badge--rank">Rank ${rankLabel}</span>
+        <span class="dossier-badge dossier-badge--world">${escapeHtml(world)} analog</span>
+      </div>`
+    : "";
 
   content.innerHTML = `
-    <div class="detail-inner">
-      <img class="site-image" src="${site.Imagen_URL}" alt="${escapeHtml(site.Sitio)}" onerror="this.style.display='none'">
-      <p class="eyebrow">CANDIDATE #${rank || "–"} · EARTH ANALOG</p>
-      <h2>${escapeHtml(site.Sitio)}</h2>
-      <p class="muted">${escapeHtml(englishCountry(site.Pais_Region))}<br>${escapeHtml(englishEnvironment(site.Tipo_Entorno))}</p>
-      <p class="coords">${Number(site.Latitud).toFixed(3)}, ${Number(site.Longitud).toFixed(3)}</p>
-      ${link ? `<a class="coord-link" href="${link}" target="_blank" rel="noopener noreferrer">Open location on OpenStreetMap ↗</a>` : ""}
-      <div class="score">${match.total.toFixed(1)}<span>%</span></div>
-      <span class="score-label">Weighted similarity · ${match.evaluados} of ${PARAM_KEYS.length} parameters compared</span>
-      <div class="progress" role="img" aria-label="Similarity ${match.total.toFixed(1)} percent"><i style="width:${match.total}%"></i></div>
-      <p class="muted">Compared with <b>${escapeHtml(describeTarget())}</b></p>
-      ${
-        rows
-          ? `<table class="comparison"><thead><tr><th>Parameter</th><th>Earth</th><th>Target</th><th>Match</th></tr></thead><tbody>${rows}</tbody></table>`
-          : '<p class="muted">No shared parameters are available for this comparison.</p>'
-      }
-      <div class="why">
-        <b>Why is it analogous?</b>
-        <p>${strongest ? `The strongest matches are ${strongest}. ` : ""}${escapeHtml(englishEnvironment(site.Tipo_Entorno))} provides a useful field context for planetary research.</p>
-        <p class="muted">The analogy has limits: Earth gravity is 1g versus 0.16g on the Moon and 0.38g on Mars. Atmospheric pressure, radiation, and composition also differ.</p>
+    <article class="dossier" aria-label="Site dossier">
+      ${media}
+      <div class="dossier-body">
+        <header class="dossier-head">
+          <p class="eyebrow">Candidate ${rankLabel} · Earth analog</p>
+          <h2>${escapeHtml(site.Sitio)}</h2>
+          <p class="dossier-location">${escapeHtml(country)}<span>${escapeHtml(environment)}</span></p>
+        </header>
+
+        <section class="dossier-score" aria-label="Weighted similarity">
+          <div class="score-ring" style="--score: ${matchBarWidth(match.total)}" role="img" aria-label="${match.total.toFixed(1)} percent weighted similarity">
+            <span class="score-ring__value">${match.total.toFixed(1)}<small>%</small></span>
+          </div>
+          <div class="score-copy">
+            <span class="score-kicker">Weighted similarity</span>
+            <strong class="score-rank">${escapeHtml(rankSummary)}</strong>
+            <span class="score-meta">${match.evaluados} of ${PARAM_KEYS.length} parameters compared</span>
+            <span class="score-target">Compared with <b>${escapeHtml(describeTarget())}</b></span>
+          </div>
+        </section>
+
+        <section class="dossier-block">
+          <h3 class="block-title">Coordinates</h3>
+          <div class="coord-grid">
+            <div class="coord-item"><small>Latitude</small><b>${latitude}</b></div>
+            <div class="coord-item"><small>Longitude</small><b>${longitude}</b></div>
+          </div>
+          ${
+            link
+              ? `<a class="coord-link" href="${link}" target="_blank" rel="noopener noreferrer">Open location on OpenStreetMap <span aria-hidden="true">↗</span></a>`
+              : ""
+          }
+        </section>
+
+        <section class="dossier-block">
+          <div class="block-head">
+            <h3 class="block-title">Parameter comparison</h3>
+            <span class="block-note">Earth · ${escapeHtml(world)} reference</span>
+          </div>
+          ${
+            rows
+              ? `<table class="comparison">
+                  <thead><tr><th scope="col">Parameter</th><th scope="col">Earth</th><th scope="col">Target</th><th scope="col">Match</th></tr></thead>
+                  <tbody>${rows}</tbody>
+                </table>`
+              : '<p class="muted block-empty">No shared parameters are available for this comparison.</p>'
+          }
+        </section>
+
+        <section class="dossier-block">
+          <h3 class="block-title">Analogy assessment</h3>
+          <div class="why">
+            <p><strong>Strongest matches.</strong> ${strongest ? `The closest parameter values are ${strongest}. ` : ""}${escapeHtml(environment)} provides a useful field context for planetary research and instrument testing.</p>
+            <p class="why-limits"><strong>Limits of the analogy.</strong> ${gravityNote} Atmospheric pressure, radiation, and surface composition also differ.</p>
+          </div>
+        </section>
+
+        <section class="dossier-block">
+          <h3 class="block-title">References</h3>
+          <dl class="ref-list">
+            <div>
+              <dt>Candidate site</dt>
+              <dd>${escapeHtml(site.Referencias || "Not provided")}</dd>
+            </div>
+            <div>
+              <dt>Reference target</dt>
+              <dd>${escapeHtml(activeTarget?.Referencias || "User-provided parameters")}</dd>
+            </div>
+          </dl>
+        </section>
       </div>
-      <div class="refs"><b>References</b><br>${escapeHtml(site.Referencias)}<br><br><b>Target references</b><br>${escapeHtml(activeTarget?.Referencias || "User-provided parameters")}</div>
-    </div>`;
+    </article>`;
 
   panel.classList.add("open");
+  content.scrollTop = 0;
 }
 
 function renderRanking() {
