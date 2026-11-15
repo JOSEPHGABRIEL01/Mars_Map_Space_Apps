@@ -3,44 +3,85 @@
 Leaflet frontend plus a Python backend that rank Earth locations by how closely
 their environmental parameters resemble a Moon or Mars reference site.
 
-The frontend is plain HTML, CSS and JavaScript with no build step. The backend
-uses only the Python standard library, so no packages are required just to run
-the app.
+The frontend is plain HTML, CSS and JavaScript built with Vite. Leaflet and the
+JSON datasets are imported as modules and bundled at build time, so the browser
+no longer needs a CDN or a runtime fetch for the data. The backend uses only the
+Python standard library.
 
-## Run it
+## Requirements
 
-### Recommended: one server for the API and the app
+- Python 3.10+ (the server and tests use the standard library only).
+- Node.js 20.19+ and npm (needed to build or develop the frontend).
+
+Install the frontend dependencies once:
 
 ```bash
 cd nasa-analog-finder
-python backend/server.py
+npm install
 ```
 
-Open <http://127.0.0.1:8000>. The server serves the frontend, injects
-`window.ANALOG_API_BASE = "/api"` into `index.html`, and answers the JSON API
-with the same similarity formula the frontend uses offline.
+## Run it
+
+### Development: Vite plus the Python API
+
+```bash
+npm run dev:full
+```
+
+This starts the Python API on <http://127.0.0.1:8000> and Vite on
+<http://127.0.0.1:5173>. Vite proxies `/api` to the backend, so the page uses
+the live ranking API. Open <http://127.0.0.1:5173>.
+
+To run the two servers in separate terminals:
+
+```bash
+npm run backend   # terminal 1, Python API on :8000
+npm run dev       # terminal 2, Vite on :5173
+```
+
+### Production: one server for the API and the built app
+
+```bash
+npm run build
+npm run serve
+```
+
+Open <http://127.0.0.1:8000>. `npm run serve` runs
+`python backend/server.py --static-dir frontend/dist`; the server serves the
+compiled assets, injects `window.ANALOG_API_BASE = "/api"` into `index.html`,
+and answers the JSON API. `npm start` runs the build and the server together.
+
+### Build and preview only
+
+```bash
+npm run build     # writes frontend/dist
+npm run preview   # serves frontend/dist on http://127.0.0.1:4173
+```
+
+`npm run preview` serves the production build. No API base is injected there, so
+it runs in **offline mode** and scores candidates in the browser from the JSON
+bundled by Vite. To use a running backend either use `npm run serve`, or open
+`http://127.0.0.1:4173/?api=http://127.0.0.1:8000/api`.
 
 Options:
 
 ```bash
-python backend/server.py --host 0.0.0.0 --port 8080
+python backend/server.py --host 0.0.0.0 --port 8080 --static-dir frontend/dist
 python backend/server.py --source csv        # use the curated CSV tables
 python backend/server.py --data-dir ../data --frontend-dir ./frontend
 ```
 
-### Offline: static frontend only
+`--frontend-dir` is where the API reads `data/*.json`; `--static-dir` is the
+built site served to the browser. When `--static-dir` is omitted it defaults to
+`--frontend-dir`, which keeps serving the source files for tests and tooling.
+The source `frontend/` folder is not meant to be opened directly in a browser
+because its ES module imports need Vite; run `npm run build` or `npm run dev`
+first.
 
-```bash
-cd nasa-analog-finder/frontend
-python -m http.server 8080
-```
-
-Open <http://localhost:8080>. Without the injected API base the page runs in
-**offline mode**: it loads the bundled JSON datasets and scores candidates in
-the browser. A `?api=` query parameter can point the page at a running backend:
+A `?api=` query parameter can still point the page at another running backend:
 
 ```
-http://localhost:8080/?api=http://127.0.0.1:8000/api
+http://127.0.0.1:5173/?api=http://127.0.0.1:8000/api
 ```
 
 ## Backend API
@@ -125,7 +166,12 @@ changing the data contract.
 ## Tests
 
 ```bash
-cd nasa-analog-finder/backend
+npm test
+```
+
+or, from `backend/`:
+
+```bash
 python -m unittest -v
 ```
 

@@ -14,10 +14,10 @@ POST /api/analogs     body: { "body": "Moon", "target": {...} } or
                       { "body": "Moon", "targetId": "South Pole" }.
                       Returns candidates ranked by the real similarity score.
 
-The server also serves the static frontend and injects
+The server also serves the static frontend from ``static_dir`` and injects
 ``window.ANALOG_API_BASE = "/api"`` into ``index.html`` so the page talks to
 this API. Without that injection the frontend stays in offline mode and scores
-locally from the bundled JSON files.
+locally from the JSON bundled by Vite.
 """
 
 from __future__ import annotations
@@ -38,7 +38,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import analog_core as core  # noqa: E402
 
-STATIC_DIR = core.FRONTEND_DIR
 API_PREFIX = "/api"
 MAX_BODY_BYTES = 64 * 1024
 INJECTION = '<script>window.ANALOG_API_BASE = "/api";</script>'
@@ -165,7 +164,7 @@ class AnalogRequestHandler(BaseHTTPRequestHandler):
 
     # Populated by ``build_server``.
     service: AnalogService
-    frontend_dir: Path
+    static_dir: Path
 
     # -- logging ----------------------------------------------------------- #
 
@@ -310,8 +309,8 @@ class AnalogRequestHandler(BaseHTTPRequestHandler):
         clean = posixpath.normpath(path).lstrip("/")
         if clean in {"", "."}:
             clean = "index.html"
-        candidate = (self.frontend_dir / clean).resolve()
-        root = self.frontend_dir.resolve()
+        candidate = (self.static_dir / clean).resolve()
+        root = self.static_dir.resolve()
         try:
             candidate.relative_to(root)
         except ValueError:
@@ -332,14 +331,13 @@ class AnalogRequestHandler(BaseHTTPRequestHandler):
 
         if target.name == "index.html":
             text = raw.decode("utf-8")
-            # Inject the API base before app.js runs. Only the served copy is
-            # modified; the file on disk stays unchanged for offline use.
+            # Inject the API base into the served copy only. Inserting it before
+            # </head> also works with Vite's hashed module scripts.
             if INJECTION not in text:
-                text = text.replace(
-                    '<script src="app.js"></script>',
-                    f"{INJECTION}\n    <script src=\"app.js\"></script>",
-                    1,
-                )
+                if "</head>" in text:
+                    text = text.replace("</head>", f"    {INJECTION}\n  </head>", 1)
+                else:
+                    text = f"{INJECTION}\n{text}"
             raw = text.encode("utf-8")
             content_type = "text/html"
             charset = "; charset=utf-8"
@@ -365,17 +363,20 @@ def build_server(
     port: int = 8000,
     data_dir: Path = core.DATA_DIR,
     frontend_dir: Path = core.FRONTEND_DIR,
+    static_dir: Path | None = None,
     source: str = "auto",
 ) -> ThreadingHTTPServer:
+    static_root = Path(static_dir) if static_dir is not None else Path(frontend_dir)
     service = AnalogService(data_dir=data_dir, frontend_dir=frontend_dir, source=source)
     handler = type(
         "BoundAnalogRequestHandler",
         (AnalogRequestHandler,),
-        {"service": service, "frontend_dir": Path(frontend_dir)},
+        {"service": service, "static_dir": static_root},
     )
     httpd = ThreadingHTTPServer((host, port), handler)
     httpd.daemon_threads = True
     httpd.service = service  # type: ignore[attr-defined]
+    httpd.static_dir = static_root  # type: ignore[attr-defined]
     return httpd
 
 
@@ -393,7 +394,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--frontend-dir",
         type=Path,
         default=core.FRONTEND_DIR,
-        help="Directory with index.html, app.js and data/",
+        help="Directory with data/*.json used by the API",
+    )
+    parser.add_argument(
+        "--static-dir",
+        type=Path,
+        default=None,
+        help="Built frontend directory (default: same as --frontend-dir)",
     )
     parser.add_argument(
         "--source",
@@ -412,6 +419,7 @@ def main(argv: list[str] | None = None) -> int:
             port=args.port,
             data_dir=args.data_dir,
             frontend_dir=args.frontend_dir,
+            static_dir=args.static_dir,
             source=args.source,
         )
     except core.DataError as error:

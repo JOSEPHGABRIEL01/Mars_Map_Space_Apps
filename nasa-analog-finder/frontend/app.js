@@ -1,3 +1,7 @@
+import L from "leaflet";
+import targetData from "./data/objetivos_espaciales.json";
+import earthData from "./data/tierra_procesada.json";
+
 /* -------------------------------------------------------------------------- */
 /* English vocabulary                                                         */
 /* -------------------------------------------------------------------------- */
@@ -1248,8 +1252,9 @@ let PARAM_KEYS = Object.keys(PARAMS);
 
 /**
  * The Python server injects `window.ANALOG_API_BASE`. A `?api=` query parameter
- * can point the page at another instance. With neither present the app keeps
- * working offline and scores candidates in the browser.
+ * can point the page at another instance, and the Vite dev server proxies
+ * `/api` by default. With no backend configured the app keeps working offline
+ * and scores candidates in the browser.
  */
 const API_BASE = resolveApiBase();
 const API_TIMEOUT = 8000;
@@ -1263,9 +1268,18 @@ function resolveApiBase() {
   } catch (error) {
     /* ignore malformed query strings */
   }
-  if (typeof window !== "undefined" && typeof window.ANALOG_API_BASE === "string") {
+  if (
+    typeof window !== "undefined" &&
+    typeof window.ANALOG_API_BASE === "string" &&
+    window.ANALOG_API_BASE
+  ) {
     return window.ANALOG_API_BASE.replace(/\/+$/, "");
   }
+
+  const envBase = import.meta.env.VITE_ANALOG_API_BASE;
+  if (envBase) return String(envBase).replace(/\/+$/, "");
+
+  if (import.meta.env.DEV) return "/api";
   return "";
 }
 
@@ -2119,18 +2133,8 @@ async function loadData() {
   }
 
   try {
-    const [targetResponse, earthResponse] = await Promise.all([
-      fetch("data/objetivos_espaciales.json"),
-      fetch("data/tierra_procesada.json"),
-    ]);
-    if (!targetResponse.ok || !earthResponse.ok) {
-      throw new Error("The dataset could not be loaded.");
-    }
-
-    const targetData = await targetResponse.json();
-    const earthData = await earthResponse.json();
     if (!Array.isArray(targetData) || !Array.isArray(earthData)) {
-      throw new Error("The dataset has an unexpected shape.");
+      throw new Error("The bundled dataset has an unexpected shape.");
     }
 
     targets = targetData;
