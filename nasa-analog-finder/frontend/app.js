@@ -1,3 +1,10 @@
+import L from "leaflet";
+import "@fontsource-variable/ibm-plex-sans";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import targetData from "./data/objetivos_espaciales.json";
+import earthData from "./data/tierra_procesada.json";
+
 /* -------------------------------------------------------------------------- */
 /* English vocabulary                                                         */
 /* -------------------------------------------------------------------------- */
@@ -31,12 +38,15 @@ const ENVIRONMENT_EN = {
   "Caldera volcanica de alta montana": "High-mountain volcanic caldera",
   "Campos de lava basaltica y tubos volcanicos": "Basaltic lava fields and volcanic tubes",
   "Playas de sulfatos y yardangs eolicos": "Sulfate flats with wind-carved yardangs",
-  "Cuenca desertica extrema bajo el nivel del mar": "Extreme desert basin below sea level",
-  "Crater de impacto cubierto por dunas eolicas": "Impact crater covered by wind-blown dunes",
+  "Cuenca desertica extrema bajo el nivel del mar":
+    "Extreme desert basin below sea level",
+  "Crater de impacto cubierto por dunas eolicas":
+    "Impact crater covered by wind-blown dunes",
   "Crater de impacto en desierto arido": "Impact crater in an arid desert",
   "Terreno arcaico rico en oxidos de hierro y silice":
     "Archaic terrain rich in iron oxides and silica",
-  "Crater de impacto simple en el Sahara central": "Simple impact crater in the central Sahara",
+  "Crater de impacto simple en el Sahara central":
+    "Simple impact crater in the central Sahara",
   "Crater de impacto circular en el Sahara": "Circular impact crater in the Sahara",
   "Domo geologico erosionado con anillos concentricos":
     "Eroded geological dome with concentric rings",
@@ -46,7 +56,8 @@ const ENVIRONMENT_EN = {
     "Volcanic maar crater with phosphate and salt deposits",
   "Cuenca evaporitica hiperarida y abanicos aluviales":
     "Hyperarid evaporitic basin with alluvial fans",
-  "Estratos de arcillas esmectitas y oxidos de hierro": "Smectite clay strata with iron oxides",
+  "Estratos de arcillas esmectitas y oxidos de hierro":
+    "Smectite clay strata with iron oxides",
   "Campo de dunas de sulfato de calcio (yeso)": "Calcium sulfate (gypsum) dune field",
   "Lago alcalino hipersalino con torres de carbonato":
     "Hypersaline alkaline lake with carbonate towers",
@@ -56,14 +67,17 @@ const ENVIRONMENT_EN = {
   "Centros volcanicos subpolares en permafrost": "Subpolar volcanic centres in permafrost",
   "Permafrost polar con manantiales subcero de sulfatos":
     "Polar permafrost with subzero sulfate springs",
-  "Conos de escoria basaltica y fisuras volcanicas": "Basaltic scoria cones and volcanic fissures",
+  "Conos de escoria basaltica y fisuras volcanicas":
+    "Basaltic scoria cones and volcanic fissures",
   "Crater volcanico hiperacido rico en azufre nativo":
     "Hyperacid volcanic crater rich in native sulfur",
   "Crater fumarolico hiperacido de sulfatos": "Hyperacid fumarolic crater with sulfates",
-  "Cuenca sedimentaria arida con arcillas y cenizas": "Arid sedimentary basin with clays and ash",
+  "Cuenca sedimentaria arida con arcillas y cenizas":
+    "Arid sedimentary basin with clays and ash",
   "Mar de dunas activas y tormentas de polvo extremas":
     "Sea of active dunes with extreme dust storms",
-  "Cuenca arida fria con gran amplitud termica": "Cold arid basin with a wide thermal range",
+  "Cuenca arida fria con gran amplitud termica":
+    "Cold arid basin with a wide thermal range",
   "Fuente principal de tormentas de polvo y aerosoles en la Tierra":
     "Major source of dust storms and aerosols on Earth",
   "Planicie evaporitica de altura en la Puna": "High-altitude evaporitic plain in the Puna",
@@ -211,6 +225,29 @@ const PARAMS = {
     step: 0.01,
   },
 };
+
+/**
+ * Reading order for the site dossier. Parameters added by the backend but not
+ * listed here are still shown in a final "Other parameters" group.
+ */
+const DETAIL_PARAM_GROUPS = [
+  {
+    title: "Thermal environment",
+    keys: [
+      "Temp_Max(C°)",
+      "Temp_Min(C°)",
+      "Amplitud_termica_(Delta_T)",
+    ],
+  },
+  {
+    title: "Terrain & vegetation",
+    keys: ["Pendiente°", "Indice_vegetacion(NDVI)"],
+  },
+  {
+    title: "Atmosphere & chemistry",
+    keys: ["Polvo/aerosoles", "Azufres_Sulfatos"],
+  },
+];
 
 const FALLBACK_TARGETS = [
     {
@@ -1233,6 +1270,10 @@ const FALLBACK_TARGETS = [
 
 const ZOOM_TARGET = 6;
 const THEME_STORAGE_KEY = "worlds-map-theme";
+// CARTO serves an empty tile without a key: coastlines only, no land fill. The
+// dark basemap would then read as a blank rectangle, so every dark tile URL
+// carries the project key.
+const CARTO_API_KEY = "cb1_59bd_1_83c56510fe43619d4f363556";
 let PARAM_KEYS = Object.keys(PARAMS);
 
 /* -------------------------------------------------------------------------- */
@@ -1241,8 +1282,9 @@ let PARAM_KEYS = Object.keys(PARAMS);
 
 /**
  * The Python server injects `window.ANALOG_API_BASE`. A `?api=` query parameter
- * can point the page at another instance. With neither present the app keeps
- * working offline and scores candidates in the browser.
+ * can point the page at another instance, and the Vite dev server proxies
+ * `/api` by default. With no backend configured the app keeps working offline
+ * and scores candidates in the browser.
  */
 const API_BASE = resolveApiBase();
 const API_TIMEOUT = 8000;
@@ -1256,9 +1298,18 @@ function resolveApiBase() {
   } catch (error) {
     /* ignore malformed query strings */
   }
-  if (typeof window !== "undefined" && typeof window.ANALOG_API_BASE === "string") {
+  if (
+    typeof window !== "undefined" &&
+    typeof window.ANALOG_API_BASE === "string" &&
+    window.ANALOG_API_BASE
+  ) {
     return window.ANALOG_API_BASE.replace(/\/+$/, "");
   }
+
+  const envBase = import.meta.env.VITE_ANALOG_API_BASE;
+  if (envBase) return String(envBase).replace(/\/+$/, "");
+
+  if (import.meta.env.DEV) return "/api";
   return "";
 }
 
@@ -1281,7 +1332,9 @@ async function fetchJson(path, options = {}) {
       try {
         const payload = await response.json();
         detail =
-          payload.error || payload.errors?._form || JSON.stringify(payload.errors || payload);
+          payload.error ||
+          payload.errors?._form ||
+          JSON.stringify(payload.errors || payload);
       } catch (error) {
         detail = response.statusText;
       }
@@ -1310,8 +1363,11 @@ function mergeParameterCatalog(catalog) {
 function setDataSource(source, extra = "") {
   const label = $("#data-source");
   if (label) {
+    label.dataset.mode = source === "api" ? "api" : "offline";
     label.textContent =
-      source === "api" ? `Live API${extra ? ` · ${extra}` : ""}` : "Prototype · offline mode";
+      source === "api"
+        ? `Live API${extra ? ` · ${extra}` : ""}`
+        : "Prototype · offline mode";
   }
   const note = $("#welcome-note");
   if (note) {
@@ -1391,10 +1447,8 @@ let targets = [],
   baseLayers = null,
   activeBase = null,
   theme = "dark",
-  visibleLimit = "50",
+  visibleLimit = "all",
   suppressMarkerClick = false;
-
-const CARTO_API_KEY = "cb1_59bd_1_83c56510fe43619d4f363556";
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -1409,7 +1463,12 @@ function siteKey(site) {
 }
 
 function hasValue(value) {
-  return value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
+  return (
+    value !== null &&
+    value !== undefined &&
+    value !== "" &&
+    Number.isFinite(Number(value))
+  );
 }
 
 function escapeHtml(value) {
@@ -1461,12 +1520,14 @@ function applyTheme(next, { persist = true } = {}) {
   theme = next === "light" ? "light" : "dark";
   document.documentElement.dataset.theme = theme;
 
-  const toggle = $("#theme-toggle");
-  if (toggle) {
+  document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
     toggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
     toggle.setAttribute("aria-pressed", String(theme === "dark"));
-    toggle.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} mode`);
-  }
+    toggle.setAttribute(
+      "aria-label",
+      `Switch to ${theme === "dark" ? "light" : "dark"} mode`,
+    );
+  });
 
   // Keep the map readable in both themes: swap the CARTO dark layer for the
   // standard OpenStreetMap layer. The layer control stays in sync because
@@ -1537,6 +1598,55 @@ function targetCoverage(target) {
   return PARAM_KEYS.filter((key) => hasValue(target?.[key])).length;
 }
 
+/** Compact signed coordinate, e.g. 89.9°S / 0°E. */
+function formatCoordinate(value, axis) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  const hemisphere =
+    axis === "lat" ? (number >= 0 ? "N" : "S") : number >= 0 ? "E" : "W";
+  return `${formatNumber(Math.abs(number), 2)}°${hemisphere}`;
+}
+
+/**
+ * Keep the mission console in sync with the reference target and the current
+ * ranking. It only reflects state; it never changes the similarity model.
+ */
+function updateTargetFacts() {
+  const body = $("#fact-body");
+  if (body) body.textContent = displayWorld(activeWorld);
+
+  const coords = $("#fact-coords");
+  if (coords) {
+    const hasCoordinates =
+      hasValue(activeTarget?.Latitud) && hasValue(activeTarget?.Longitud);
+    coords.textContent = hasCoordinates
+      ? `${formatCoordinate(activeTarget.Latitud, "lat")} / ${formatCoordinate(activeTarget.Longitud, "lng")}`
+      : "Not defined";
+  }
+
+  const params = $("#fact-params");
+  if (params) {
+    params.textContent = activeTarget
+      ? `${targetCoverage(activeTarget)} / ${PARAM_KEYS.length}`
+      : "—";
+  }
+
+  const best = $("#fact-best");
+  if (best) {
+    best.textContent =
+      ranked.length && ranked[0]?.match
+        ? `${ranked[0].match.total.toFixed(1)}% · ${ranked[0].Sitio}`
+        : "No candidates";
+  }
+
+  const legendTarget = $("#legend-target");
+  if (legendTarget) {
+    legendTarget.textContent = activeTarget
+      ? `vs. ${describeTarget()}`
+      : "Ranked by similarity";
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Map                                                                        */
 /* -------------------------------------------------------------------------- */
@@ -1576,11 +1686,26 @@ function initMap() {
   activeBase = theme === "dark" ? baseLayers.dark : baseLayers.standard;
   activeBase.addTo(map);
 
+  // Safety net: if the dark tiles cannot load at all (blocked network, key
+  // revoked), swap in the standard layer so the map never stays blank.
+  let darkTileErrors = 0;
+  baseLayers.dark.on("add", () => {
+    darkTileErrors = 0;
+  });
+  baseLayers.dark.on("tileerror", () => {
+    darkTileErrors += 1;
+    if (darkTileErrors < 4 || !map || activeBase !== baseLayers.dark) return;
+    map.removeLayer(baseLayers.dark);
+    baseLayers.standard.addTo(map);
+    activeBase = baseLayers.standard;
+  });
+
   L.control
-    .layers({ "Dark map": baseLayers.dark, "Standard map": baseLayers.standard }, null, {
-      position: "bottomright",
-      collapsed: true,
-    })
+    .layers(
+      { "Dark map": baseLayers.dark, "Standard map": baseLayers.standard },
+      null,
+      { position: "bottomright", collapsed: true },
+    )
     .addTo(map);
 
   // A marker click that ends a map drag should never open a profile by mistake.
@@ -1601,7 +1726,7 @@ function initMap() {
 function fitCandidates() {
   if (!map || !ranked.length) return;
 
-  const points = visibleCandidates()
+  const points = ranked
     .slice(0, 12)
     .map((site) => [Number(site.Latitud), Number(site.Longitud)])
     .filter(([lat, lng]) => Number.isFinite(lat) && Number.isFinite(lng));
@@ -1625,7 +1750,10 @@ function setWorld(world) {
   customTarget = null;
 
   const label = $("#active-world");
-  if (label) label.textContent = `/ ${displayWorld(world)}`;
+  if (label) label.textContent = displayWorld(world);
+
+  const index = $("#menu-world-index");
+  if (index) index.textContent = world === "Marte" ? "02" : "01";
 
   document.querySelectorAll(".world-switch [data-world]").forEach((button) => {
     const active = button.dataset.world === world;
@@ -1646,6 +1774,7 @@ function setWorld(world) {
   }
 
   activeTarget = options[0] || null;
+  updateTargetFacts();
   rankAndRender();
 }
 
@@ -1681,7 +1810,9 @@ function selectSite(site, { fly = true, openPanel = true } = {}) {
 function updateMarkerSelection() {
   if (!markers) return;
   markers.eachLayer((marker) => {
-    const active = Boolean(selectedSite && marker.siteKey === siteKey(selectedSite));
+    const active = Boolean(
+      selectedSite && marker.siteKey === siteKey(selectedSite),
+    );
     marker.setZIndexOffset(active ? 1000 : 0);
     const element = marker.getElement();
     if (element) {
@@ -1694,7 +1825,9 @@ function updateMarkerSelection() {
 function highlightRankingSelection() {
   document.querySelectorAll(".ranking-row").forEach((row) => {
     const site = ranked[Number(row.dataset.index)];
-    const active = Boolean(site && selectedSite && siteKey(site) === siteKey(selectedSite));
+    const active = Boolean(
+      site && selectedSite && siteKey(site) === siteKey(selectedSite),
+    );
     row.classList.toggle("is-selected", active);
     row.setAttribute("aria-pressed", String(active));
   });
@@ -1703,6 +1836,10 @@ function highlightRankingSelection() {
 /* -------------------------------------------------------------------------- */
 /* Rendering                                                                  */
 /* -------------------------------------------------------------------------- */
+
+function visibleCandidates() {
+  return visibleLimit === "all" ? ranked : ranked.slice(0, Number(visibleLimit));
+}
 
 function renderMarkers() {
   if (!map) return;
@@ -1714,8 +1851,9 @@ function renderMarkers() {
 
   markers = L.layerGroup();
 
-  const visible = visibleCandidates();
-  visible.forEach((site, index) => {
+  const shown = visibleCandidates();
+
+  shown.forEach((site, index) => {
     const isTop = index < 10;
     const size = isTop ? 14 : 10;
     const icon = L.divIcon({
@@ -1754,10 +1892,65 @@ function renderMarkers() {
   markers.addTo(map);
   updateMarkerSelection();
   refreshMap();
+
+  const count = $("#candidate-count");
+  if (count) {
+    count.textContent =
+      shown.length === ranked.length
+        ? `· ${ranked.length} sites`
+        : `· ${shown.length} of ${ranked.length} sites`;
+  }
 }
 
-function visibleCandidates() {
-  return visibleLimit === "all" ? ranked : ranked.slice(0, Number(visibleLimit));
+function matchBarWidth(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return 0;
+  return Math.max(0, Math.min(100, number));
+}
+
+function detailComparisonRow(key, value) {
+  const meta = PARAMS[key] || { label: key, unit: "" };
+  return `<tr>
+    <td class="param-name">${escapeHtml(meta.label)}${meta.unit ? `<small>${escapeHtml(meta.unit)}</small>` : ""}</td>
+    <td class="param-value">${formatNumber(value.tierra)}</td>
+    <td class="param-value">${formatNumber(value.objetivo)}</td>
+    <td class="param-match">
+      <span class="param-match__bar" aria-hidden="true"><i style="width:${matchBarWidth(value.similitud)}%"></i></span>
+      <b>${Number(value.similitud).toFixed(1)}%</b>
+    </td>
+  </tr>`;
+}
+
+/**
+ * Group the comparison rows into readable scientific categories. Unknown
+ * parameters coming from a newer backend catalog fall into their own group.
+ */
+function detailComparisonGroups(entries) {
+  const remaining = new Map(entries);
+  const groups = [];
+
+  DETAIL_PARAM_GROUPS.forEach(({ title, keys }) => {
+    const rows = keys
+      .filter((key) => remaining.has(key))
+      .map((key) => [key, remaining.get(key)])
+      .sort((a, b) => b[1].similitud - a[1].similitud);
+    rows.forEach(([key]) => remaining.delete(key));
+    if (rows.length) groups.push({ title, rows });
+  });
+
+  const rest = [...remaining.entries()].sort(
+    (a, b) => b[1].similitud - a[1].similitud,
+  );
+  if (rest.length) groups.push({ title: "Other parameters", rows: rest });
+
+  return groups
+    .map(
+      (group) =>
+        `<tr class="param-group-row"><th colspan="4" scope="colgroup">${escapeHtml(group.title)}</th></tr>${group.rows
+          .map(([key, value]) => detailComparisonRow(key, value))
+          .join("")}`,
+    )
+    .join("");
 }
 
 function showDetail(site) {
@@ -1766,8 +1959,11 @@ function showDetail(site) {
   if (!panel || !content) return;
 
   if (!site) {
-    content.innerHTML =
-      '<p class="muted empty-hint">No Earth analog candidates are available for this target.</p>';
+    content.innerHTML = `<div class="dossier-empty">
+      <p class="eyebrow">Site dossier</p>
+      <h2>No candidate available</h2>
+      <p class="muted">No Earth analog candidates are available for this target.</p>
+    </div>`;
     panel.classList.remove("open");
     return;
   }
@@ -1775,56 +1971,136 @@ function showDetail(site) {
   const match = site.match || calcularSimilitud(site, activeTarget);
   const rank = ranked.findIndex((item) => siteKey(item) === siteKey(site)) + 1;
 
-  const entries = Object.entries(match.desglose).sort((a, b) => b[1].similitud - a[1].similitud);
+  const entries = Object.entries(match.desglose).sort(
+    (a, b) => b[1].similitud - a[1].similitud,
+  );
 
-  const rows = entries
-    .map(([key, value]) => {
-      const meta = PARAMS[key];
-      return `<tr><td>${meta.label}</td><td>${formatNumber(value.tierra)} ${meta.unit}</td><td>${formatNumber(value.objetivo)} ${meta.unit}</td><td><b>${value.similitud.toFixed(1)}%</b></td></tr>`;
-    })
-    .join("");
+  const rows = detailComparisonGroups(entries);
 
   const strongest = entries
     .slice(0, 2)
-    .map(([key, value]) => `${PARAMS[key].label.toLowerCase()} (${value.similitud.toFixed(0)}%)`)
+    .map(
+      ([key, value]) =>
+        `${PARAMS[key].label.toLowerCase()} (${value.similitud.toFixed(0)}%)`,
+    )
     .join(" and ");
 
   const link = coordinateLink(site);
+  const country = englishCountry(site.Pais_Region);
+  const environment = englishEnvironment(site.Tipo_Entorno);
+  const world = displayWorld(activeWorld);
+  const latitude = formatCoordinate(site.Latitud, "lat");
+  const longitude = formatCoordinate(site.Longitud, "lng");
+  const rankLabel = rank ? `#${rank}` : "—";
+  const rankSummary =
+    rank && ranked.length
+      ? `Rank ${rank} of ${ranked.length}`
+      : "Unranked candidate";
+  const gravityNote =
+    activeWorld === "Marte"
+      ? "Earth gravity is 1g versus 0.38g on Mars."
+      : "Earth gravity is 1g versus 0.16g on the Moon.";
+
+  const media = site.Imagen_URL
+    ? `<div class="dossier-media">
+        <img
+          src="${escapeHtml(site.Imagen_URL)}"
+          alt="${escapeHtml(site.Sitio)} — Earth analog candidate"
+          loading="lazy"
+          decoding="async"
+          onerror="this.closest('.dossier-media').classList.add('is-empty')"
+        >
+        <span class="dossier-badge dossier-badge--rank">Rank ${rankLabel}</span>
+        <span class="dossier-badge dossier-badge--world">${escapeHtml(world)} analog</span>
+      </div>`
+    : "";
 
   content.innerHTML = `
-    <div class="detail-inner">
-      <img class="site-image" src="${site.Imagen_URL}" alt="${escapeHtml(site.Sitio)}" onerror="this.style.display='none'">
-      <p class="eyebrow">CANDIDATE #${rank || "–"} · EARTH ANALOG</p>
-      <h2>${escapeHtml(site.Sitio)}</h2>
-      <p class="muted">${escapeHtml(englishCountry(site.Pais_Region))}<br>${escapeHtml(englishEnvironment(site.Tipo_Entorno))}</p>
-      <p class="coords">${Number(site.Latitud).toFixed(3)}, ${Number(site.Longitud).toFixed(3)}</p>
-      ${link ? `<a class="coord-link" href="${link}" target="_blank" rel="noopener noreferrer">Open location on OpenStreetMap ↗</a>` : ""}
-      <div class="score">${match.total.toFixed(1)}<span>%</span></div>
-      <span class="score-label">Weighted similarity · ${match.evaluados} of ${PARAM_KEYS.length} parameters compared</span>
-      <div class="progress" role="img" aria-label="Similarity ${match.total.toFixed(1)} percent"><i style="width:${match.total}%"></i></div>
-      <p class="muted">Compared with <b>${escapeHtml(describeTarget())}</b></p>
-      ${
-        rows
-          ? `<table class="comparison"><thead><tr><th>Parameter</th><th>Earth</th><th>Target</th><th>Match</th></tr></thead><tbody>${rows}</tbody></table>`
-          : '<p class="muted">No shared parameters are available for this comparison.</p>'
-      }
-      <div class="why">
-        <b>Why is it analogous?</b>
-        <p>${strongest ? `The strongest matches are ${strongest}. ` : ""}${escapeHtml(englishEnvironment(site.Tipo_Entorno))} provides a useful field context for planetary research.</p>
-        <p class="muted">The analogy has limits: Earth gravity is 1g versus 0.16g on the Moon and 0.38g on Mars. Atmospheric pressure, radiation, and composition also differ.</p>
+    <article class="dossier" aria-label="Site dossier">
+      ${media}
+      <div class="dossier-body">
+        <header class="dossier-head">
+          <p class="eyebrow">Candidate ${rankLabel} · Earth analog</p>
+          <h2>${escapeHtml(site.Sitio)}</h2>
+          <p class="dossier-location">${escapeHtml(country)}<span>${escapeHtml(environment)}</span></p>
+        </header>
+
+        <section class="dossier-score" aria-label="Weighted similarity">
+          <div class="score-ring" style="--score: ${matchBarWidth(match.total)}" role="img" aria-label="${match.total.toFixed(1)} percent weighted similarity">
+            <span class="score-ring__value">${match.total.toFixed(1)}<small>%</small></span>
+          </div>
+          <div class="score-copy">
+            <span class="score-kicker">Weighted similarity</span>
+            <strong class="score-rank">${escapeHtml(rankSummary)}</strong>
+            <span class="score-meta">${match.evaluados} of ${PARAM_KEYS.length} parameters compared</span>
+            <span class="score-target">Compared with <b>${escapeHtml(describeTarget())}</b></span>
+          </div>
+        </section>
+
+        <section class="dossier-block">
+          <h3 class="block-title">Coordinates</h3>
+          <div class="coord-grid">
+            <div class="coord-item"><small>Latitude</small><b>${latitude}</b></div>
+            <div class="coord-item"><small>Longitude</small><b>${longitude}</b></div>
+          </div>
+          ${
+            link
+              ? `<a class="coord-link" href="${link}" target="_blank" rel="noopener noreferrer">Open location on OpenStreetMap <span aria-hidden="true">↗</span></a>`
+              : ""
+          }
+        </section>
+
+        <section class="dossier-block">
+          <div class="block-head">
+            <h3 class="block-title">Parameter comparison</h3>
+            <span class="block-note">Earth · ${escapeHtml(world)} reference</span>
+          </div>
+          ${
+            rows
+              ? `<table class="comparison">
+                  <thead><tr><th scope="col">Parameter</th><th scope="col">Earth</th><th scope="col">Target</th><th scope="col">Match</th></tr></thead>
+                  <tbody>${rows}</tbody>
+                </table>`
+              : '<p class="muted block-empty">No shared parameters are available for this comparison.</p>'
+          }
+        </section>
+
+        <section class="dossier-block">
+          <h3 class="block-title">Analogy assessment</h3>
+          <div class="why">
+            <p><strong>Strongest matches.</strong> ${strongest ? `The closest parameter values are ${strongest}. ` : ""}${escapeHtml(environment)} provides a useful field context for planetary research and instrument testing.</p>
+            <p class="why-limits"><strong>Limits of the analogy.</strong> ${gravityNote} Atmospheric pressure, radiation, and surface composition also differ.</p>
+          </div>
+        </section>
+
+        <section class="dossier-block">
+          <h3 class="block-title">References</h3>
+          <dl class="ref-list">
+            <div>
+              <dt>Candidate site</dt>
+              <dd>${escapeHtml(site.Referencias || "Not provided")}</dd>
+            </div>
+            <div>
+              <dt>Reference target</dt>
+              <dd>${escapeHtml(activeTarget?.Referencias || "User-provided parameters")}</dd>
+            </div>
+          </dl>
+        </section>
       </div>
-      <div class="refs"><b>References</b><br>${escapeHtml(site.Referencias)}<br><br><b>Target references</b><br>${escapeHtml(activeTarget?.Referencias || "User-provided parameters")}</div>
-    </div>`;
+    </article>`;
 
   panel.classList.add("open");
+  content.scrollTop = 0;
 }
 
 function renderRanking() {
   const list = $("#ranking-list");
   if (!list) return;
 
+  updateTargetFacts();
+
   const limitControl = $("#ranking-limit");
-  const requestedLimit = limitControl?.value || "50";
+  const requestedLimit = limitControl?.value || "10";
   const limit = requestedLimit === "all" ? ranked.length : Number(requestedLimit);
   const summary = $("#ranking-summary");
 
@@ -1834,7 +2110,8 @@ function renderRanking() {
   }
 
   if (!ranked.length) {
-    list.innerHTML = '<p class="muted empty-hint">No candidates are available for this target.</p>';
+    list.innerHTML =
+      '<p class="muted empty-hint">No candidates are available for this target.</p>';
     return;
   }
 
@@ -1844,10 +2121,14 @@ function renderRanking() {
       const strongest = Object.entries(site.match.desglose)
         .sort((a, b) => b[1].similitud - a[1].similitud)
         .slice(0, 2)
-        .map(([key, value]) => `${PARAMS[key].label} ${value.similitud.toFixed(0)}%`)
+        .map(
+          ([key, value]) => `${PARAMS[key].label} ${value.similitud.toFixed(0)}%`,
+        )
         .join(" · ");
       const link = coordinateLink(site);
-      const active = Boolean(selectedSite && siteKey(selectedSite) === siteKey(site));
+      const active = Boolean(
+        selectedSite && siteKey(selectedSite) === siteKey(site),
+      );
 
       return `<div class="ranking-row${active ? " is-selected" : ""}" data-index="${index}" role="button" tabindex="0" aria-pressed="${active}" aria-label="Show ${escapeHtml(site.Sitio)} on the map">
         <span class="rank-number">#${index + 1}</span>
@@ -1958,7 +2239,8 @@ function readCustomValues(form) {
   const values = {};
   PARAM_KEYS.forEach((key) => {
     const raw = data.get(key);
-    values[key] = raw === null || String(raw).trim() === "" ? null : Number(raw);
+    values[key] =
+      raw === null || String(raw).trim() === "" ? null : Number(raw);
   });
   return values;
 }
@@ -1985,7 +2267,8 @@ function validateValues(values) {
   const max = values["Temp_Max(C°)"];
   const min = values["Temp_Min(C°)"];
   if (Number.isFinite(max) && Number.isFinite(min) && max < min) {
-    errors["Temp_Max(C°)"] = "Maximum temperature must be greater than or equal to the minimum.";
+    errors["Temp_Max(C°)"] =
+      "Maximum temperature must be greater than or equal to the minimum.";
   }
 
   if (!provided && Object.keys(errors).length === 0) {
@@ -2021,7 +2304,8 @@ function handleCustomSubmit(event) {
     Number.isFinite(values["Temp_Max(C°)"]) &&
     Number.isFinite(values["Temp_Min(C°)"])
   ) {
-    values["Amplitud_termica_(Delta_T)"] = values["Temp_Max(C°)"] - values["Temp_Min(C°)"];
+    values["Amplitud_termica_(Delta_T)"] =
+      values["Temp_Max(C°)"] - values["Temp_Min(C°)"];
   }
 
   const { errors, provided } = validateValues(values);
@@ -2057,6 +2341,7 @@ function handleCustomSubmit(event) {
     note.hidden = false;
   }
 
+  updateTargetFacts();
   closeDialog($("#custom-dialog"));
   rankAndRender();
 }
@@ -2094,18 +2379,8 @@ async function loadData() {
   }
 
   try {
-    const [targetResponse, earthResponse] = await Promise.all([
-      fetch("data/objetivos_espaciales.json"),
-      fetch("data/tierra_procesada.json"),
-    ]);
-    if (!targetResponse.ok || !earthResponse.ok) {
-      throw new Error("The dataset could not be loaded.");
-    }
-
-    const targetData = await targetResponse.json();
-    const earthData = await earthResponse.json();
     if (!Array.isArray(targetData) || !Array.isArray(earthData)) {
-      throw new Error("The dataset has an unexpected shape.");
+      throw new Error("The bundled dataset has an unexpected shape.");
     }
 
     targets = targetData;
@@ -2122,6 +2397,35 @@ async function loadData() {
 function updateCount() {
   const count = $("#candidate-count");
   if (count) count.textContent = `· ${earth.length} sites`;
+
+  const rankingCount = $("#ranking-count");
+  if (rankingCount) rankingCount.textContent = String(earth.length);
+
+  const worlds = new Set(targets.map((item) => item.Cuerpo).filter(Boolean));
+  const pad = (value) => String(value).padStart(2, "0");
+
+  const worldCount = $("#hero-world-count");
+  if (worldCount) worldCount.textContent = pad(worlds.size || 2);
+
+  const targetCount = $("#hero-target-count");
+  if (targetCount) targetCount.textContent = pad(targets.length);
+
+  const earthCount = $("#hero-earth-count");
+  if (earthCount) earthCount.textContent = String(earth.length);
+
+  // The landing cards describe the bundled targets today, but the lists are
+  // derived from the dataset so new reference sites appear without editing the
+  // markup.
+  document.querySelectorAll("[data-target-list]").forEach((node) => {
+    const names = targets
+      .filter((item) => item.Cuerpo === node.dataset.targetList)
+      .map((item) => item.Sitio)
+      .filter(Boolean);
+    if (!names.length) return;
+    const shown = names.slice(0, 3).join(" · ");
+    const extra = names.length > 3 ? ` · +${names.length - 3}` : "";
+    node.textContent = `Targets: ${shown}${extra}`;
+  });
 }
 
 function bindRankingList() {
@@ -2157,19 +2461,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   await initBackend();
   await loadData();
 
+  function openWorld(world) {
+    $("#welcome")?.classList.add("hidden");
+    $("#app")?.classList.remove("hidden");
+    if (!map) initMap();
+    setWorld(world);
+    refreshMap();
+    setTimeout(refreshMap, 250);
+  }
+
+  function showOverview() {
+    $("#app")?.classList.add("hidden");
+    $("#welcome")?.classList.remove("hidden");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+  }
+
   document.querySelectorAll("[data-world]").forEach((button) => {
-    button.addEventListener("click", () => {
-      $("#welcome").classList.add("hidden");
-      $("#app").classList.remove("hidden");
-      if (!map) initMap();
-      setWorld(button.dataset.world);
-      refreshMap();
-      setTimeout(refreshMap, 250);
+    button.addEventListener("click", () => openWorld(button.dataset.world));
+  });
+
+  $("#back-to-overview")?.addEventListener("click", showOverview);
+
+  $("#start-exploring")?.addEventListener("click", () => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    $("#worlds")?.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "start",
     });
   });
 
-  $("#theme-toggle")?.addEventListener("click", () => {
-    applyTheme(theme === "dark" ? "light" : "dark");
+  document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      applyTheme(theme === "dark" ? "light" : "dark");
+    });
   });
 
   $("#target-select")?.addEventListener("change", (event) => {
@@ -2191,6 +2516,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
+    updateTargetFacts();
     rankAndRender();
   });
 
@@ -2214,7 +2540,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (dialog && !dialog.open) dialog.showModal();
   });
 
-  $("#close-ranking")?.addEventListener("click", () => closeDialog($("#ranking-dialog")));
+  $("#close-ranking")?.addEventListener("click", () =>
+    closeDialog($("#ranking-dialog")),
+  );
 
   $("#ranking-limit")?.addEventListener("change", renderRanking);
 
