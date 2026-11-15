@@ -1337,6 +1337,7 @@ function mergeParameterCatalog(catalog) {
 function setDataSource(source, extra = "") {
   const label = $("#data-source");
   if (label) {
+    label.dataset.mode = source === "api" ? "api" : "offline";
     label.textContent =
       source === "api"
         ? `Live API${extra ? ` · ${extra}` : ""}`
@@ -1570,6 +1571,55 @@ function targetCoverage(target) {
   return PARAM_KEYS.filter((key) => hasValue(target?.[key])).length;
 }
 
+/** Compact signed coordinate, e.g. 89.9°S / 0°E. */
+function formatCoordinate(value, axis) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  const hemisphere =
+    axis === "lat" ? (number >= 0 ? "N" : "S") : number >= 0 ? "E" : "W";
+  return `${formatNumber(Math.abs(number), 2)}°${hemisphere}`;
+}
+
+/**
+ * Keep the mission console in sync with the reference target and the current
+ * ranking. It only reflects state; it never changes the similarity model.
+ */
+function updateTargetFacts() {
+  const body = $("#fact-body");
+  if (body) body.textContent = displayWorld(activeWorld);
+
+  const coords = $("#fact-coords");
+  if (coords) {
+    const hasCoordinates =
+      hasValue(activeTarget?.Latitud) && hasValue(activeTarget?.Longitud);
+    coords.textContent = hasCoordinates
+      ? `${formatCoordinate(activeTarget.Latitud, "lat")} / ${formatCoordinate(activeTarget.Longitud, "lng")}`
+      : "Not defined";
+  }
+
+  const params = $("#fact-params");
+  if (params) {
+    params.textContent = activeTarget
+      ? `${targetCoverage(activeTarget)} / ${PARAM_KEYS.length}`
+      : "—";
+  }
+
+  const best = $("#fact-best");
+  if (best) {
+    best.textContent =
+      ranked.length && ranked[0]?.match
+        ? `${ranked[0].match.total.toFixed(1)}% · ${ranked[0].Sitio}`
+        : "No candidates";
+  }
+
+  const legendTarget = $("#legend-target");
+  if (legendTarget) {
+    legendTarget.textContent = activeTarget
+      ? `vs. ${describeTarget()}`
+      : "Ranked by similarity";
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Map                                                                        */
 /* -------------------------------------------------------------------------- */
@@ -1656,7 +1706,10 @@ function setWorld(world) {
   customTarget = null;
 
   const label = $("#active-world");
-  if (label) label.textContent = `/ ${displayWorld(world)}`;
+  if (label) label.textContent = displayWorld(world);
+
+  const index = $("#menu-world-index");
+  if (index) index.textContent = world === "Marte" ? "02" : "01";
 
   document.querySelectorAll(".world-switch [data-world]").forEach((button) => {
     const active = button.dataset.world === world;
@@ -1677,6 +1730,7 @@ function setWorld(world) {
   }
 
   activeTarget = options[0] || null;
+  updateTargetFacts();
   rankAndRender();
 }
 
@@ -1857,6 +1911,8 @@ function showDetail(site) {
 function renderRanking() {
   const list = $("#ranking-list");
   if (!list) return;
+
+  updateTargetFacts();
 
   const limitControl = $("#ranking-limit");
   const limit = Number(limitControl?.value || 10);
@@ -2099,6 +2155,7 @@ function handleCustomSubmit(event) {
     note.hidden = false;
   }
 
+  updateTargetFacts();
   closeDialog($("#custom-dialog"));
   rankAndRender();
 }
@@ -2154,6 +2211,9 @@ async function loadData() {
 function updateCount() {
   const count = $("#candidate-count");
   if (count) count.textContent = `· ${earth.length} sites`;
+
+  const rankingCount = $("#ranking-count");
+  if (rankingCount) rankingCount.textContent = String(earth.length);
 
   const worlds = new Set(targets.map((item) => item.Cuerpo).filter(Boolean));
   const pad = (value) => String(value).padStart(2, "0");
@@ -2224,9 +2284,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     setTimeout(refreshMap, 250);
   }
 
+  function showOverview() {
+    $("#app")?.classList.add("hidden");
+    $("#welcome")?.classList.remove("hidden");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+  }
+
   document.querySelectorAll("[data-world]").forEach((button) => {
     button.addEventListener("click", () => openWorld(button.dataset.world));
   });
+
+  $("#back-to-overview")?.addEventListener("click", showOverview);
 
   $("#start-exploring")?.addEventListener("click", () => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2261,6 +2330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
+    updateTargetFacts();
     rankAndRender();
   });
 

@@ -238,7 +238,7 @@
 
     <main id="app" class="app hidden">
       <header class="topbar">
-        <div class="brand-block">
+        <div class="topbar-main">
           <span class="brand-mark brand-mark--sm" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none">
               <circle cx="16" cy="16" r="6.5" stroke="currentColor" stroke-width="1.4" />
@@ -255,11 +255,20 @@
               <circle cx="25.2" cy="8.8" r="1.6" fill="currentColor" />
             </svg>
           </span>
-          <span class="brand">Worlds Map</span>
-          <span class="brand-descriptor">NASA Analog Finder</span>
-          <span id="active-world" class="world-label"></span>
+          <span class="brand-lockup--app">
+            <span class="brand">Worlds Map</span>
+            <span class="brand-descriptor">NASA Analog Finder</span>
+          </span>
+          <span class="topbar-rule" aria-hidden="true"></span>
+          <span class="mission-id">
+            <span class="mission-id__label">Mission</span>
+            <span id="active-world" class="mission-id__world">Moon</span>
+          </span>
         </div>
         <div class="topbar-actions">
+          <span id="data-source" class="source-chip" data-mode="offline">
+            Prototype · offline mode
+          </span>
           <div class="world-switch" role="group" aria-label="Celestial body">
             <button type="button" data-world="Luna">Moon</button>
             <button type="button" data-world="Marte">Mars</button>
@@ -273,6 +282,23 @@
           >
             Light mode
           </button>
+          <button
+            type="button"
+            id="back-to-overview"
+            class="overview-button"
+            aria-label="Return to the Worlds Map overview"
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M13 8H4M7.5 3.5 3 8l4.5 4.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span class="overview-label">Overview</span>
+          </button>
         </div>
       </header>
 
@@ -280,13 +306,55 @@
         <div id="map" role="application" aria-label="Map of Earth analog candidates"></div>
 
         <aside id="mission-menu" class="mission-menu" aria-label="Mission target">
-          <label for="target-select">Mission target <span>(reference site)</span></label>
-          <select id="target-select"></select>
+          <header class="menu-head">
+            <p class="eyebrow">Mission reference</p>
+            <span id="menu-world-index" class="menu-index" aria-hidden="true">01</span>
+          </header>
+
+          <label class="field-label" for="target-select">Target site</label>
+          <div class="select-shell">
+            <select id="target-select"></select>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="m4 6 4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
           <p id="target-note" class="target-note" hidden></p>
-          <button type="button" id="custom-target" class="custom">＋ Custom target</button>
-          <button type="button" id="ranking-button" class="ranking-button">
-            ▤ View analog ranking
-          </button>
+
+          <dl class="target-facts">
+            <div class="fact">
+              <dt>World</dt>
+              <dd id="fact-body">Moon</dd>
+            </div>
+            <div class="fact">
+              <dt>Coordinates</dt>
+              <dd id="fact-coords">—</dd>
+            </div>
+            <div class="fact">
+              <dt>Parameters</dt>
+              <dd id="fact-params">—</dd>
+            </div>
+            <div class="fact fact--wide">
+              <dt>Closest Earth analog</dt>
+              <dd id="fact-best">—</dd>
+            </div>
+          </dl>
+
+          <div class="menu-actions">
+            <button type="button" id="custom-target" class="custom">
+              <span class="action-symbol" aria-hidden="true">＋</span>
+              Custom target
+            </button>
+            <button type="button" id="ranking-button" class="ranking-button">
+              Ranking
+              <span id="ranking-count" class="action-count">50</span>
+            </button>
+          </div>
         </aside>
 
         <aside id="detail-panel" class="detail-panel" aria-label="Location details">
@@ -301,9 +369,11 @@
         </aside>
 
         <div class="legend">
-          <span class="pin-dot" aria-hidden="true"></span> Earth analog candidates
+          <span class="pin-dot" aria-hidden="true"></span>
+          <span class="legend-label">Earth analog candidates</span>
           <span id="candidate-count"></span>
-          <span id="data-source" class="legend-note">Prototype · offline mode</span>
+          <span class="legend-divider" aria-hidden="true"></span>
+          <span id="legend-target" class="legend-target">Ranked by similarity</span>
         </div>
       </div>
     </main>
