@@ -49,8 +49,8 @@
   --star-mid: rgba(224, 238, 255, 0.5);
   --star-bright: rgba(248, 252, 255, 0.95);
   --star-glow: rgba(112, 174, 255, 0.26);
-  --font-display: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Inter Variable", Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Patrick Hand", "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Patrick Hand", "Inter Variable", Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
