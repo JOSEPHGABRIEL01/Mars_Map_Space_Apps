@@ -1,3 +1,119 @@
+/* -------------------------------------------------------------------------- */
+/* English vocabulary                                                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The dataset keeps its original Spanish field values. The interface is
+ * English only, so descriptions and country names are translated when they are
+ * rendered. The data files themselves stay untouched.
+ */
+const ENVIRONMENT_EN = {
+  "Campo volcanico y crateres maar": "Volcanic field with maar craters",
+  "Desierto polar hiperarido": "Hyperarid polar desert",
+  "Desierto hiperarido y cuencas salinas": "Hyperarid desert with salt basins",
+  "Planicie evaporitica de sulfatos y litio": "Evaporitic sulfate and lithium plain",
+  "Crater de impacto polar en permafrost": "Polar impact crater in permafrost",
+  "Flujos basalticos y tubos de lava": "Basaltic flows and lava tubes",
+  "Cuenca eolica extrema y yardangs": "Extreme wind-sculpted basin with yardangs",
+  "Sistema hidrotermal acido y sulfatos": "Acidic hydrothermal system with sulfates",
+  "Ambiente acido extremo rico en hierro y azufre":
+    "Extreme acidic environment rich in iron and sulfur",
+  "Volcan en escudo basaltico y tubos de lava": "Basaltic shield volcano with lava tubes",
+  "Planicie volcanica subpolar y fisuras basalticas":
+    "Subpolar volcanic plain with basaltic fissures",
+  "Crater de impacto preservado en desierto": "Well-preserved impact crater in desert",
+  "Crater de impacto en trampa basaltica": "Impact crater in a basaltic trap",
+  "Crater de impacto subartico": "Subarctic impact crater",
+  "Valles de arenisca y oxidos de hierro": "Sandstone valleys with iron oxides",
+  "Campo de megadunas eolicas hiperaridas": "Field of hyperarid megadunes",
+  "Altiplano hiperarido de gran altitud": "High-altitude hyperarid plateau",
+  "Estratovolcan basaltico y piroclastos": "Basaltic stratovolcano with pyroclastics",
+  "Caldera volcanica de alta montana": "High-mountain volcanic caldera",
+  "Campos de lava basaltica y tubos volcanicos": "Basaltic lava fields and volcanic tubes",
+  "Playas de sulfatos y yardangs eolicos": "Sulfate flats with wind-carved yardangs",
+  "Cuenca desertica extrema bajo el nivel del mar":
+    "Extreme desert basin below sea level",
+  "Crater de impacto cubierto por dunas eolicas":
+    "Impact crater covered by wind-blown dunes",
+  "Crater de impacto en desierto arido": "Impact crater in an arid desert",
+  "Terreno arcaico rico en oxidos de hierro y silice":
+    "Archaic terrain rich in iron oxides and silica",
+  "Crater de impacto simple en el Sahara central":
+    "Simple impact crater in the central Sahara",
+  "Crater de impacto circular en el Sahara": "Circular impact crater in the Sahara",
+  "Domo geologico erosionado con anillos concentricos":
+    "Eroded geological dome with concentric rings",
+  "Volcan en escudo piroclastico en el Sahara": "Pyroclastic shield volcano in the Sahara",
+  "Domos de lava tobas y tubos basalticos": "Lava domes, tuffs and basaltic tubes",
+  "Crater maar volcanico con fondo de fosfatos y sales":
+    "Volcanic maar crater with phosphate and salt deposits",
+  "Cuenca evaporitica hiperarida y abanicos aluviales":
+    "Hyperarid evaporitic basin with alluvial fans",
+  "Estratos de arcillas esmectitas y oxidos de hierro":
+    "Smectite clay strata with iron oxides",
+  "Campo de dunas de sulfato de calcio (yeso)": "Calcium sulfate (gypsum) dune field",
+  "Lago alcalino hipersalino con torres de carbonato":
+    "Hypersaline alkaline lake with carbonate towers",
+  "Cuenca evaporitica andina y vulcanismo": "Andean evaporitic basin with volcanism",
+  "Campo volcanico con mas de 800 conos basalticos":
+    "Volcanic field with more than 800 basaltic cones",
+  "Centros volcanicos subpolares en permafrost": "Subpolar volcanic centres in permafrost",
+  "Permafrost polar con manantiales subcero de sulfatos":
+    "Polar permafrost with subzero sulfate springs",
+  "Conos de escoria basaltica y fisuras volcanicas":
+    "Basaltic scoria cones and volcanic fissures",
+  "Crater volcanico hiperacido rico en azufre nativo":
+    "Hyperacid volcanic crater rich in native sulfur",
+  "Crater fumarolico hiperacido de sulfatos": "Hyperacid fumarolic crater with sulfates",
+  "Cuenca sedimentaria arida con arcillas y cenizas":
+    "Arid sedimentary basin with clays and ash",
+  "Mar de dunas activas y tormentas de polvo extremas":
+    "Sea of active dunes with extreme dust storms",
+  "Cuenca arida fria con gran amplitud termica":
+    "Cold arid basin with a wide thermal range",
+  "Fuente principal de tormentas de polvo y aerosoles en la Tierra":
+    "Major source of dust storms and aerosols on Earth",
+  "Planicie evaporitica de altura en la Puna": "High-altitude evaporitic plain in the Puna",
+  "Volcan activo polar con cuevas de hielo fumarolicas":
+    "Active polar volcano with fumarolic ice caves",
+  "Crater de impacto en estepa arida con vidrios de impacto":
+    "Impact crater in arid steppe with impact glasses",
+  "Uno de los sistemas de tubos de lava mas largos de la Tierra":
+    "One of the longest lava tube systems on Earth",
+};
+
+const COUNTRY_EN = {
+  Mexico: "Mexico",
+  Antartida: "Antarctica",
+  Chile: "Chile",
+  Bolivia: "Bolivia",
+  Canada: "Canada",
+  "Estados Unidos": "United States",
+  Iran: "Iran",
+  Etiopia: "Ethiopia",
+  Espana: "Spain",
+  "Estados Unidos (Hawai)": "United States (Hawaii)",
+  Islandia: "Iceland",
+  India: "India",
+  Jordania: "Jordan",
+  Namibia: "Namibia",
+  Italia: "Italy",
+  China: "China",
+  Australia: "Australia",
+  Argelia: "Algeria",
+  Mauritania: "Mauritania",
+  Chad: "Chad",
+  "Arabia Saudita": "Saudi Arabia",
+  Argentina: "Argentina",
+  Noruega: "Norway",
+  Rusia: "Russia",
+  Indonesia: "Indonesia",
+  "Costa Rica": "Costa Rica",
+  Mongolia: "Mongolia",
+  Kazajistan: "Kazakhstan",
+};
+
+// Fallback for free-text descriptions that are not in the dictionary above.
 const ENVIROMAP = [
   ["Campo volcanico", "Volcanic field"],
   ["crateres", "craters"],
@@ -14,50 +130,95 @@ const ENVIROMAP = [
   ["rico en", "rich in"],
   [" y ", " and "],
 ];
+
 function englishEnvironment(text) {
-  let value = String(text || "");
+  const raw = String(text || "").trim();
+  if (!raw) return "";
+  if (ENVIRONMENT_EN[raw]) return ENVIRONMENT_EN[raw];
+  let value = raw;
   ENVIROMAP.forEach(([from, to]) => (value = value.replaceAll(from, to)));
   return value;
 }
+
+function englishCountry(text) {
+  const raw = String(text || "").trim();
+  return COUNTRY_EN[raw] || raw;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Comparable parameters                                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * `min` / `max` are validation bounds for user-provided values. `scale` and
+ * `weight` keep the weighted Gaussian distance used by the original model.
+ */
 const PARAMS = {
   "Temp_Max(C°)": {
     label: "Maximum temperature",
     unit: "°C",
     scale: 25,
     weight: 1.2,
+    min: -150,
+    max: 150,
+    step: 0.1,
   },
   "Temp_Min(C°)": {
     label: "Minimum temperature",
     unit: "°C",
     scale: 30,
     weight: 1.2,
+    min: -200,
+    max: 100,
+    step: 0.1,
   },
   "Amplitud_termica_(Delta_T)": {
-    label: "Thermal range",
+    label: "Thermal range (ΔT)",
     unit: "°C",
     scale: 40,
     weight: 1.3,
+    min: 0,
+    max: 400,
+    step: 0.1,
   },
-  "Pendiente°": { label: "Slope", unit: "°", scale: 5, weight: 1 },
+  "Pendiente°": {
+    label: "Slope",
+    unit: "°",
+    scale: 5,
+    weight: 1,
+    min: 0,
+    max: 90,
+    step: 0.01,
+  },
   "Indice_vegetacion(NDVI)": {
     label: "Vegetation index",
     unit: "NDVI",
     scale: 0.15,
     weight: 0.8,
+    min: 0,
+    max: 1,
+    step: 0.01,
   },
   "Polvo/aerosoles": {
     label: "Dust / aerosol",
     unit: "AOD",
     scale: 0.2,
     weight: 1,
+    min: 0,
+    max: 5,
+    step: 0.01,
   },
   Azufres_Sulfatos: {
     label: "Sulfate index",
-    unit: "Index",
+    unit: "index",
     scale: 0.25,
     weight: 1.3,
+    min: 0,
+    max: 5,
+    step: 0.01,
   },
 };
+
 const FALLBACK_TARGETS = [
     {
       Sitio: "South Pole",
@@ -1072,30 +1233,297 @@ const FALLBACK_TARGETS = [
         "Microsoft Planetary Computer STAC API: NASA NASADEM 30m / MODIS LST MOD11A1 / Landsat 8-9 OLI-TIRS / MODIS AOD",
     },
   ];
+
+/* -------------------------------------------------------------------------- */
+/* Application state                                                          */
+/* -------------------------------------------------------------------------- */
+
+const ZOOM_TARGET = 6;
+const THEME_STORAGE_KEY = "worlds-map-theme";
+let PARAM_KEYS = Object.keys(PARAMS);
+
+/* -------------------------------------------------------------------------- */
+/* Backend connection (optional)                                              */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The Python server injects `window.ANALOG_API_BASE`. A `?api=` query parameter
+ * can point the page at another instance. With neither present the app keeps
+ * working offline and scores candidates in the browser.
+ */
+const API_BASE = resolveApiBase();
+const API_TIMEOUT = 8000;
+let apiAvailable = false;
+let rankingToken = 0;
+
+function resolveApiBase() {
+  try {
+    const override = new URLSearchParams(window.location.search).get("api");
+    if (override) return override.replace(/\/+$/, "");
+  } catch (error) {
+    /* ignore malformed query strings */
+  }
+  if (typeof window !== "undefined" && typeof window.ANALOG_API_BASE === "string") {
+    return window.ANALOG_API_BASE.replace(/\/+$/, "");
+  }
+  return "";
+}
+
+async function fetchJson(path, options = {}) {
+  if (!API_BASE) throw new Error("No backend is configured.");
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), API_TIMEOUT);
+  const headers = { Accept: "application/json", ...(options.headers || {}) };
+  if (options.body) headers["Content-Type"] = "application/json";
+
+  try {
+    const response = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers,
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      let detail = "";
+      try {
+        const payload = await response.json();
+        detail =
+          payload.error ||
+          payload.errors?._form ||
+          JSON.stringify(payload.errors || payload);
+      } catch (error) {
+        detail = response.statusText;
+      }
+      throw new Error(detail || `Request failed (${response.status})`);
+    }
+    return await response.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Merge the server parameter catalog into the local fallback table. */
+function mergeParameterCatalog(catalog) {
+  if (!catalog || typeof catalog !== "object") return;
+  Object.entries(catalog).forEach(([key, meta]) => {
+    if (!meta || typeof meta !== "object") return;
+    if (PARAMS[key]) {
+      Object.assign(PARAMS[key], meta);
+    } else {
+      PARAMS[key] = { ...meta };
+    }
+  });
+  PARAM_KEYS = Object.keys(PARAMS);
+}
+
+function setDataSource(source, extra = "") {
+  const label = $("#data-source");
+  if (label) {
+    label.textContent =
+      source === "api"
+        ? `Live API${extra ? ` · ${extra}` : ""}`
+        : "Prototype · offline mode";
+  }
+  const note = $("#welcome-note");
+  if (note) {
+    note.textContent =
+      source === "api"
+        ? "Prototype · similarity is computed by the Python backend."
+        : "Prototype · similarity is computed locally from the bundled sample dataset.";
+  }
+}
+
+async function initBackend() {
+  if (!API_BASE) {
+    setDataSource("offline");
+    return false;
+  }
+
+  try {
+    const health = await fetchJson("/health");
+    if (health?.status !== "ok") throw new Error("Backend is not healthy.");
+    try {
+      const spec = await fetchJson("/parameters");
+      mergeParameterCatalog(spec?.parameters);
+    } catch (error) {
+      console.warn("Parameter catalog unavailable, keeping local values:", error);
+    }
+    apiAvailable = true;
+    setDataSource("api", `${health.source || "data"}`);
+    return true;
+  } catch (error) {
+    console.warn("Backend unavailable, using offline mode:", error);
+    apiAvailable = false;
+    setDataSource("offline");
+    return false;
+  }
+}
+
+/** Convert a server match object into the shape the renderers expect. */
+function clientMatch(match) {
+  const desglose = {};
+  Object.entries(match?.breakdown || {}).forEach(([key, item]) => {
+    desglose[key] = {
+      tierra: item.earth,
+      objetivo: item.target,
+      similitud: item.match,
+    };
+  });
+  return {
+    total: Number(match?.score) || 0,
+    desglose,
+    evaluados: Number(match?.parameterCount) || 0,
+  };
+}
+
+function fromServerRecord(record) {
+  const { match, ...site } = record;
+  return { ...site, match: clientMatch(match) };
+}
+
+/** Only the comparable values are sent as a custom target. */
+function pickTargetValues(target) {
+  const values = {};
+  PARAM_KEYS.forEach((key) => {
+    if (hasValue(target?.[key])) values[key] = Number(target[key]);
+  });
+  return values;
+}
+
 let targets = [],
   earth = [],
   activeWorld = "Luna",
   activeTarget = null,
+  customTarget = null,
   ranked = [],
+  selectedSite = null,
   markers = null,
-  map = null;
+  map = null,
+  baseLayers = null,
+  activeBase = null,
+  theme = "dark",
+  suppressMarkerClick = false;
+
+const $ = (selector) => document.querySelector(selector);
+
+function displayWorld(world) {
+  if (world === "Luna") return "Moon";
+  if (world === "Marte") return "Mars";
+  return world;
+}
+
+function siteKey(site) {
+  return `${site.Sitio}|${site.Latitud}|${site.Longitud}`;
+}
+
+function hasValue(value) {
+  return (
+    value !== null &&
+    value !== undefined &&
+    value !== "" &&
+    Number.isFinite(Number(value))
+  );
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[character],
+  );
+}
+
+function formatNumber(value, digits = 2) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "—";
+  const text = number.toFixed(digits);
+  return text.includes(".") ? text.replace(/0+$/, "").replace(/\.$/, "") : text;
+}
+
+/** OpenStreetMap deep link built from the coordinates of a single location. */
+function coordinateLink(site) {
+  const lat = Number(site?.Latitud);
+  const lng = Number(site?.Longitud);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return "";
+  const latitude = lat.toFixed(5);
+  const longitude = lng.toFixed(5);
+  return `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=9/${latitude}/${longitude}`;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Theme (light / dark)                                                       */
+/* -------------------------------------------------------------------------- */
+
+function storedTheme() {
+  try {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY);
+    if (saved === "light" || saved === "dark") return saved;
+  } catch (error) {
+    /* storage can be unavailable in private contexts */
+  }
+  return "dark";
+}
+
+function applyTheme(next, { persist = true } = {}) {
+  theme = next === "light" ? "light" : "dark";
+  document.documentElement.dataset.theme = theme;
+
+  const toggle = $("#theme-toggle");
+  if (toggle) {
+    toggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+    toggle.setAttribute("aria-pressed", String(theme === "dark"));
+    toggle.setAttribute(
+      "aria-label",
+      `Switch to ${theme === "dark" ? "light" : "dark"} mode`,
+    );
+  }
+
+  // Keep the map readable in both themes: swap the CARTO dark layer for the
+  // standard OpenStreetMap layer. The layer control stays in sync because
+  // Leaflet listens to add/remove events on the map.
+  if (map && baseLayers) {
+    const desired = theme === "dark" ? baseLayers.dark : baseLayers.standard;
+    if (activeBase && map.hasLayer(activeBase)) map.removeLayer(activeBase);
+    if (!map.hasLayer(desired)) desired.addTo(map);
+    activeBase = desired;
+    refreshMap();
+  }
+
+  if (persist) {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch (error) {
+      /* ignore */
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Similarity model                                                           */
+/* -------------------------------------------------------------------------- */
+
 function calcularSimilitud(site, target) {
-  let weighted = 0,
-    totalWeight = 0;
+  let weighted = 0;
+  let totalWeight = 0;
   const desglose = {};
+
   for (const [key, meta] of Object.entries(PARAMS)) {
-    const a = Number(target[key]),
-      b = Number(site[key]);
-    if (
-      target[key] === null ||
-      target[key] === undefined ||
-      target[key] === "" ||
-      !Number.isFinite(a) ||
-      !Number.isFinite(b)
-    )
-      continue;
-    const z = Math.abs(b - a) / meta.scale,
-      score = 100 * Math.exp(-(z * z));
+    // A parameter is compared only when BOTH the reference target and the
+    // candidate hold a real value. Missing data is never read as zero and is
+    // excluded from the weighted average.
+    if (!hasValue(target?.[key]) || !hasValue(site?.[key])) continue;
+
+    const a = Number(target[key]);
+    const b = Number(site[key]);
+    const z = Math.abs(b - a) / meta.scale;
+    const score = 100 * Math.exp(-(z * z));
+
     desglose[key] = {
       tierra: b,
       objetivo: a,
@@ -1104,180 +1532,729 @@ function calcularSimilitud(site, target) {
     weighted += score * meta.weight;
     totalWeight += meta.weight;
   }
+
   return {
     total: totalWeight ? Math.round((weighted / totalWeight) * 10) / 10 : 0,
     desglose,
     evaluados: Object.keys(desglose).length,
   };
 }
+
 function targetFor(world) {
-  return targets.filter((x) => x.Cuerpo === world);
+  return targets.filter((item) => item.Cuerpo === world);
 }
+
+function describeTarget() {
+  if (!activeTarget) return "no reference target";
+  return activeTarget.Sitio || "custom target";
+}
+
+function targetCoverage(target) {
+  return PARAM_KEYS.filter((key) => hasValue(target?.[key])).length;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Map                                                                        */
+/* -------------------------------------------------------------------------- */
+
 function refreshMap() {
-  if (map && document.querySelector("#map").offsetWidth)
+  if (map && map.getContainer().offsetWidth) {
     requestAnimationFrame(() => map.invalidateSize(true));
+  }
 }
+
 function initMap() {
-  map = L.map("map", { worldCopyJump: true }).setView([20, 0], 2);
-  const dark = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution: "© OpenStreetMap © CARTO",
-    }).addTo(map),
-    standard = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
-    });
-  L.control.layers({ Dark: dark, Map: standard }, null, { position: "bottomright" }).addTo(map);
-  new ResizeObserver(refreshMap).observe(document.querySelector("#map"));
+  map = L.map("map", {
+    worldCopyJump: true,
+    zoomControl: false,
+    minZoom: 2,
+  }).setView([20, 0], 2);
+
+  L.control.zoom({ position: "bottomright" }).addTo(map);
+
+  baseLayers = {
+    dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: "abcd",
+      maxZoom: 20,
+    }),
+    standard: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    }),
+  };
+
+  activeBase = theme === "dark" ? baseLayers.dark : baseLayers.standard;
+  activeBase.addTo(map);
+
+  L.control
+    .layers(
+      { "Dark map": baseLayers.dark, "Standard map": baseLayers.standard },
+      null,
+      { position: "bottomright", collapsed: true },
+    )
+    .addTo(map);
+
+  // A marker click that ends a map drag should never open a profile by mistake.
+  map.on("dragstart", () => {
+    suppressMarkerClick = true;
+  });
+  map.on("dragend", () => {
+    setTimeout(() => {
+      suppressMarkerClick = false;
+    }, 120);
+  });
+
+  new ResizeObserver(refreshMap).observe($("#map"));
   window.addEventListener("resize", refreshMap);
   map.whenReady(refreshMap);
 }
+
+function fitCandidates() {
+  if (!map || !ranked.length) return;
+
+  const points = ranked
+    .slice(0, 12)
+    .map((site) => [Number(site.Latitud), Number(site.Longitud)])
+    .filter(([lat, lng]) => Number.isFinite(lat) && Number.isFinite(lng));
+
+  if (!points.length) return;
+  if (points.length === 1) {
+    map.setView(points[0], 5);
+    return;
+  }
+
+  const wide = window.matchMedia("(min-width: 900px)").matches;
+  map.fitBounds(L.latLngBounds(points), {
+    paddingTopLeft: wide ? [430, 90] : [30, 150],
+    paddingBottomRight: wide ? [340, 70] : [30, 40],
+    maxZoom: 5,
+  });
+}
+
 function setWorld(world) {
   activeWorld = world;
-  document.querySelector("#active-world").textContent = `/ ${world === "Luna" ? "Moon" : "Mars"}`;
-  const options = targetFor(world),
-    select = document.querySelector("#target-select");
-  select.innerHTML = options.map((x, i) => `<option value="${i}">${x.Sitio}</option>`).join("");
-  activeTarget = options[0] || {};
+  customTarget = null;
+
+  const label = $("#active-world");
+  if (label) label.textContent = `/ ${displayWorld(world)}`;
+
+  document.querySelectorAll(".world-switch [data-world]").forEach((button) => {
+    const active = button.dataset.world === world;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+
+  const options = targetFor(world);
+  const select = $("#target-select");
+  select.innerHTML = options
+    .map((item, index) => `<option value="${index}">${escapeHtml(item.Sitio)}</option>`)
+    .join("");
+
+  const note = $("#target-note");
+  if (note) {
+    note.hidden = true;
+    note.textContent = "";
+  }
+
+  activeTarget = options[0] || null;
   rankAndRender();
 }
-function rankAndRender() {
-  ranked = earth
-    .map((site) => ({ ...site, match: calcularSimilitud(site, activeTarget) }))
-    .sort((a, b) => b.match.total - a.match.total);
-  renderMarkers();
-  if (ranked[0]) showDetail(ranked[0]);
-  renderRanking();
+
+/* -------------------------------------------------------------------------- */
+/* Selection: markers ↔ ranking ↔ detail panel                                */
+/* -------------------------------------------------------------------------- */
+
+function selectSite(site, { fly = true, openPanel = true } = {}) {
+  if (!site) return;
+
+  const same = Boolean(selectedSite && siteKey(selectedSite) === siteKey(site));
+  selectedSite = site;
+
+  updateMarkerSelection();
+  highlightRankingSelection();
+  if (openPanel) showDetail(site);
+
+  if (!fly || !map) return;
+
+  const lat = Number(site.Latitud);
+  const lng = Number(site.Longitud);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+  const zoom = Math.max(map.getZoom(), ZOOM_TARGET);
+  const alreadyCentered = map.getCenter().distanceTo(L.latLng(lat, lng)) < 5000;
+
+  // Repeated clicks on the same marker must not restart the flight animation.
+  if (same && alreadyCentered && map.getZoom() >= ZOOM_TARGET) return;
+
+  map.flyTo([lat, lng], zoom, { duration: 0.8 });
 }
+
+function updateMarkerSelection() {
+  if (!markers) return;
+  markers.eachLayer((marker) => {
+    const active = Boolean(
+      selectedSite && marker.siteKey === siteKey(selectedSite),
+    );
+    marker.setZIndexOffset(active ? 1000 : 0);
+    const element = marker.getElement();
+    if (element) {
+      element.classList.toggle("is-selected", active);
+      element.setAttribute("aria-current", active ? "true" : "false");
+    }
+  });
+}
+
+function highlightRankingSelection() {
+  document.querySelectorAll(".ranking-row").forEach((row) => {
+    const site = ranked[Number(row.dataset.index)];
+    const active = Boolean(
+      site && selectedSite && siteKey(site) === siteKey(selectedSite),
+    );
+    row.classList.toggle("is-selected", active);
+    row.setAttribute("aria-pressed", String(active));
+  });
+}
+
+/* -------------------------------------------------------------------------- */
+/* Rendering                                                                  */
+/* -------------------------------------------------------------------------- */
+
 function renderMarkers() {
   if (!map) return;
-  if (markers) markers.clearLayers();
+
+  if (markers) {
+    markers.clearLayers();
+    map.removeLayer(markers);
+  }
+
   markers = L.layerGroup();
+
   ranked.forEach((site, index) => {
+    const isTop = index < 10;
+    const size = isTop ? 14 : 10;
     const icon = L.divIcon({
-      className: "candidate-marker",
-      html: `<span style="display:block;background:#ff5964;width:${index < 10 ? 14 : 10}px;height:${index < 10 ? 14 : 10}px;border:2px solid white;border-radius:50%;box-shadow:0 2px 6px #0008"></span>`,
-      iconSize: [16, 16],
-      iconAnchor: [8, 8],
+      className: `candidate-marker${isTop ? " is-top" : ""}`,
+      html: `<span class="candidate-marker__dot" style="width:${size}px;height:${size}px"></span>`,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
     });
-    L.marker([site.Latitud, site.Longitud], { icon, title: site.Sitio })
+
+    const marker = L.marker([site.Latitud, site.Longitud], {
+      icon,
+      title: `#${index + 1} ${site.Sitio} — ${site.match.total.toFixed(1)}% similarity`,
+      alt: `${site.Sitio}, rank ${index + 1}`,
+      keyboard: true,
+      riseOnHover: true,
+    });
+
+    marker.siteKey = siteKey(site);
+
+    marker
       .bindTooltip(
-        `#${index + 1} · ${site.Sitio}<br><b>${site.match.total.toFixed(1)}%</b> similarity`,
-        { direction: "top" },
+        `<b>#${index + 1} · ${escapeHtml(site.Sitio)}</b><br>${escapeHtml(englishCountry(site.Pais_Region))}<br><b>${site.match.total.toFixed(1)}%</b> similarity`,
+        {
+          direction: "top",
+          offset: [0, -(size / 2)],
+          className: "site-tooltip",
+        },
       )
-      .on("click", () => showDetail(site))
+      .on("click", () => {
+        if (suppressMarkerClick) return;
+        selectSite(site);
+      })
       .addTo(markers);
   });
+
   markers.addTo(map);
+  updateMarkerSelection();
   refreshMap();
 }
+
 function showDetail(site) {
-  const panel = document.querySelector("#detail-panel"),
-    m = site.match;
-  const rows = Object.entries(m.desglose)
-    .map(
-      ([key, v]) =>
-        `<tr><td>${PARAMS[key].label}</td><td>${v.tierra.toFixed(2)} ${PARAMS[key].unit}</td><td>${v.objetivo.toFixed(2)} ${PARAMS[key].unit}</td><td><b>${v.similitud.toFixed(1)}%</b></td></tr>`,
-    )
+  const panel = $("#detail-panel");
+  const content = $("#detail-content");
+  if (!panel || !content) return;
+
+  if (!site) {
+    content.innerHTML =
+      '<p class="muted empty-hint">No Earth analog candidates are available for this target.</p>';
+    panel.classList.remove("open");
+    return;
+  }
+
+  const match = site.match || calcularSimilitud(site, activeTarget);
+  const rank = ranked.findIndex((item) => siteKey(item) === siteKey(site)) + 1;
+
+  const entries = Object.entries(match.desglose).sort(
+    (a, b) => b[1].similitud - a[1].similitud,
+  );
+
+  const rows = entries
+    .map(([key, value]) => {
+      const meta = PARAMS[key];
+      return `<tr><td>${meta.label}</td><td>${formatNumber(value.tierra)} ${meta.unit}</td><td>${formatNumber(value.objetivo)} ${meta.unit}</td><td><b>${value.similitud.toFixed(1)}%</b></td></tr>`;
+    })
     .join("");
-  const best =
-    Object.entries(m.desglose)
-      .sort((a, b) => b[1].similitud - a[1].similitud)
-      .slice(0, 2)
-      .map((x) => PARAMS[x[0]].label)
-      .join(" and ") || "the available parameters";
-  document.querySelector("#detail-content").innerHTML =
-    `<div class="detail-inner"><img class="site-image" src="${site.Imagen_URL}" alt="${site.Sitio}" onerror="this.style.display='none'"><p class="eyebrow">CANDIDATE #${ranked.indexOf(site) + 1} ? EARTH CANDIDATE</p><h2>${site.Sitio}</h2><p class="muted">${site.Pais_Region.replace("Antartida", "Antarctica")}<br><span class="coords">${Number(site.Latitud).toFixed(3)}, ${Number(site.Longitud).toFixed(3)}</span></p><div class="score">${m.total.toFixed(1)}%</div><div class="score-label">Weighted similarity ? ${m.evaluados} parameters</div><div class="progress"><i style="width:${m.total}%"></i></div><p class="muted">Compared with <b>${activeTarget.Sitio || "custom target"}</b></p><table class="comparison"><thead><tr><th>Parameter</th><th>Earth</th><th>Target</th><th>Match</th></tr></thead><tbody>${rows}</tbody></table><div class="why"><b>Why is it analogous?</b><p>The strongest matches are ${best}. ${englishEnvironment(site.Tipo_Entorno)} provides a useful field context for planetary research.</p><p class="muted">The analogy has limits: Earth gravity is 1g versus 0.16g on the Moon and 0.38g on Mars. Atmospheric pressure, radiation, and composition also differ.</p></div><div class="refs"><b>References</b><br>${site.Referencias}<br><br><b>Target references</b><br>${activeTarget.Referencias || "User-provided parameters"}</div></div>`;
+
+  const strongest = entries
+    .slice(0, 2)
+    .map(
+      ([key, value]) =>
+        `${PARAMS[key].label.toLowerCase()} (${value.similitud.toFixed(0)}%)`,
+    )
+    .join(" and ");
+
+  const link = coordinateLink(site);
+
+  content.innerHTML = `
+    <div class="detail-inner">
+      <img class="site-image" src="${site.Imagen_URL}" alt="${escapeHtml(site.Sitio)}" onerror="this.style.display='none'">
+      <p class="eyebrow">CANDIDATE #${rank || "–"} · EARTH ANALOG</p>
+      <h2>${escapeHtml(site.Sitio)}</h2>
+      <p class="muted">${escapeHtml(englishCountry(site.Pais_Region))}<br>${escapeHtml(englishEnvironment(site.Tipo_Entorno))}</p>
+      <p class="coords">${Number(site.Latitud).toFixed(3)}, ${Number(site.Longitud).toFixed(3)}</p>
+      ${link ? `<a class="coord-link" href="${link}" target="_blank" rel="noopener noreferrer">Open location on OpenStreetMap ↗</a>` : ""}
+      <div class="score">${match.total.toFixed(1)}<span>%</span></div>
+      <span class="score-label">Weighted similarity · ${match.evaluados} of ${PARAM_KEYS.length} parameters compared</span>
+      <div class="progress" role="img" aria-label="Similarity ${match.total.toFixed(1)} percent"><i style="width:${match.total}%"></i></div>
+      <p class="muted">Compared with <b>${escapeHtml(describeTarget())}</b></p>
+      ${
+        rows
+          ? `<table class="comparison"><thead><tr><th>Parameter</th><th>Earth</th><th>Target</th><th>Match</th></tr></thead><tbody>${rows}</tbody></table>`
+          : '<p class="muted">No shared parameters are available for this comparison.</p>'
+      }
+      <div class="why">
+        <b>Why is it analogous?</b>
+        <p>${strongest ? `The strongest matches are ${strongest}. ` : ""}${escapeHtml(englishEnvironment(site.Tipo_Entorno))} provides a useful field context for planetary research.</p>
+        <p class="muted">The analogy has limits: Earth gravity is 1g versus 0.16g on the Moon and 0.38g on Mars. Atmospheric pressure, radiation, and composition also differ.</p>
+      </div>
+      <div class="refs"><b>References</b><br>${escapeHtml(site.Referencias)}<br><br><b>Target references</b><br>${escapeHtml(activeTarget?.Referencias || "User-provided parameters")}</div>
+    </div>`;
+
   panel.classList.add("open");
 }
+
 function renderRanking() {
-  const list = document.querySelector("#ranking-list");
+  const list = $("#ranking-list");
   if (!list) return;
-  const limit = Number(document.querySelector("#ranking-limit").value || 10);
-  document.querySelector("#ranking-summary").textContent =
-    `${ranked.length} candidates · weighted Gaussian distance`;
+
+  const limitControl = $("#ranking-limit");
+  const limit = Number(limitControl?.value || 10);
+  const summary = $("#ranking-summary");
+
+  if (summary) {
+    const coverage = targetCoverage(activeTarget);
+    summary.textContent = `${ranked.length} candidates · weighted Gaussian distance · ${coverage} of ${PARAM_KEYS.length} reference parameters`;
+  }
+
+  if (!ranked.length) {
+    list.innerHTML =
+      '<p class="muted empty-hint">No candidates are available for this target.</p>';
+    return;
+  }
+
   list.innerHTML = ranked
     .slice(0, limit)
-    .map(
-      (s, i) =>
-        `<div class="ranking-row" data-index="${i}"><span class="rank-number">#${i + 1}</span><span class="rank-site"><strong>${s.Sitio}</strong><small>${s.Pais_Region} · ${englishEnvironment(s.Tipo_Entorno)}</small></span><span class="rank-bar"><i style="width:${s.match.total}%"></i></span><span class="rank-score">${s.match.total.toFixed(1)}%</span></div>`,
-    )
+    .map((site, index) => {
+      const strongest = Object.entries(site.match.desglose)
+        .sort((a, b) => b[1].similitud - a[1].similitud)
+        .slice(0, 2)
+        .map(
+          ([key, value]) => `${PARAMS[key].label} ${value.similitud.toFixed(0)}%`,
+        )
+        .join(" · ");
+      const link = coordinateLink(site);
+      const active = Boolean(
+        selectedSite && siteKey(selectedSite) === siteKey(site),
+      );
+
+      return `<div class="ranking-row${active ? " is-selected" : ""}" data-index="${index}" role="button" tabindex="0" aria-pressed="${active}" aria-label="Show ${escapeHtml(site.Sitio)} on the map">
+        <span class="rank-number">#${index + 1}</span>
+        <span class="rank-site">
+          <strong>${escapeHtml(site.Sitio)}</strong>
+          <small>${escapeHtml(englishCountry(site.Pais_Region))} · ${escapeHtml(englishEnvironment(site.Tipo_Entorno))}</small>
+          <small class="rank-why">${strongest ? `Strongest: ${escapeHtml(strongest)} · ${site.match.evaluados} parameters` : "No shared parameters"}</small>
+        </span>
+        <span class="rank-bar" aria-hidden="true"><i style="width:${site.match.total}%"></i></span>
+        <span class="rank-score">${site.match.total.toFixed(1)}%</span>
+        ${
+          link
+            ? `<a class="rank-link" href="${link}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(site.Sitio)} on OpenStreetMap" title="Open on OpenStreetMap" data-link>↗</a>`
+            : "<span></span>"
+        }
+      </div>`;
+    })
     .join("");
-  list.querySelectorAll(".ranking-row").forEach(
-    (row) =>
-      (row.onclick = () => {
-        showDetail(ranked[Number(row.dataset.index)]);
-        document.querySelector("#ranking-dialog").close();
-      }),
-  );
 }
+
+async function rankAndRender() {
+  const token = ++rankingToken;
+  const target = activeTarget;
+
+  if (apiAvailable && target) {
+    try {
+      const isCustom = target === customTarget;
+      const payload = isCustom
+        ? { body: activeWorld, target: pickTargetValues(target) }
+        : { body: activeWorld, targetId: target.Sitio };
+      const response = await fetchJson("/analogs", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      if (token !== rankingToken) return;
+      if (Array.isArray(response?.results)) {
+        ranked = response.results.map(fromServerRecord);
+        renderMarkers();
+        renderRanking();
+        if (!ranked.length) {
+          selectedSite = null;
+          showDetail(null);
+          return;
+        }
+        selectSite(ranked[0], { fly: false, openPanel: true });
+        fitCandidates();
+        return;
+      }
+      throw new Error("The backend returned no results.");
+    } catch (error) {
+      console.warn("Server ranking failed, scoring locally:", error);
+      if (token !== rankingToken) return;
+    }
+  }
+
+  if (token !== rankingToken) return;
+
+  ranked = earth
+    .map((site) => ({
+      ...site,
+      match: calcularSimilitud(site, target),
+    }))
+    .sort((a, b) => b.match.total - a.match.total);
+
+  renderMarkers();
+  renderRanking();
+
+  if (!ranked.length) {
+    selectedSite = null;
+    showDetail(null);
+    return;
+  }
+
+  selectSite(ranked[0], { fly: false, openPanel: true });
+  fitCandidates();
+}
+
+/* -------------------------------------------------------------------------- */
+/* Custom target                                                              */
+/* -------------------------------------------------------------------------- */
+
+function fieldMarkup(key, meta, value) {
+  const current = hasValue(value) ? value : "";
+  return `<label class="custom-field">
+    <span>${meta.label} <em>${meta.unit}</em></span>
+    <input name="${key}" type="number" step="${meta.step}" min="${meta.min}" max="${meta.max}" inputmode="decimal" placeholder="Not available" autocomplete="off" value="${current}">
+    <small class="field-error" data-error-for="${key}"></small>
+  </label>`;
+}
+
 function setupCustom() {
-  document.querySelector("#custom-fields").innerHTML = Object.entries(PARAMS)
-    .map(
-      ([key, meta]) =>
-        `<label>${meta.label}<input name="${key}" type="number" step="any" ${key.includes("NDVI") ? "min=0 max=1" : ""}></label>`,
-    )
+  const fields = $("#custom-fields");
+  if (!fields) return;
+
+  const source = customTarget || {};
+  fields.innerHTML = Object.entries(PARAMS)
+    .map(([key, meta]) => fieldMarkup(key, meta, source[key]))
     .join("");
-  document.querySelector("#custom-dialog").showModal();
+
+  renderFormErrors({});
+
+  const dialog = $("#custom-dialog");
+  if (dialog && !dialog.open) dialog.showModal();
 }
+
+function readCustomValues(form) {
+  const data = new FormData(form);
+  const values = {};
+  PARAM_KEYS.forEach((key) => {
+    const raw = data.get(key);
+    values[key] =
+      raw === null || String(raw).trim() === "" ? null : Number(raw);
+  });
+  return values;
+}
+
+function validateValues(values) {
+  const errors = {};
+  let provided = 0;
+
+  for (const [key, meta] of Object.entries(PARAMS)) {
+    const value = values[key];
+    if (value === null || value === undefined) continue;
+
+    if (!Number.isFinite(value)) {
+      errors[key] = "Enter a valid number.";
+      continue;
+    }
+    if (value < meta.min || value > meta.max) {
+      errors[key] = `Enter a value between ${meta.min} and ${meta.max} ${meta.unit}.`;
+      continue;
+    }
+    provided += 1;
+  }
+
+  const max = values["Temp_Max(C°)"];
+  const min = values["Temp_Min(C°)"];
+  if (Number.isFinite(max) && Number.isFinite(min) && max < min) {
+    errors["Temp_Max(C°)"] =
+      "Maximum temperature must be greater than or equal to the minimum.";
+  }
+
+  if (!provided && Object.keys(errors).length === 0) {
+    errors._form = "Enter at least one environmental parameter.";
+  }
+
+  return { errors, provided };
+}
+
+function renderFormErrors(errors) {
+  document.querySelectorAll("[data-error-for]").forEach((node) => {
+    node.textContent = errors[node.dataset.errorFor] || "";
+  });
+
+  const formError = $("#custom-error");
+  const message = errors._form || "";
+  if (formError) {
+    formError.textContent = message;
+    formError.hidden = !message;
+  }
+}
+
+function handleCustomSubmit(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const values = readCustomValues(form);
+
+  // Derive the thermal range only when both temperatures are present and the
+  // user left the field empty. A missing value is never treated as zero.
+  if (
+    values["Amplitud_termica_(Delta_T)"] === null &&
+    Number.isFinite(values["Temp_Max(C°)"]) &&
+    Number.isFinite(values["Temp_Min(C°)"])
+  ) {
+    values["Amplitud_termica_(Delta_T)"] =
+      values["Temp_Max(C°)"] - values["Temp_Min(C°)"];
+  }
+
+  const { errors, provided } = validateValues(values);
+  renderFormErrors(errors);
+
+  if (Object.keys(errors).length) {
+    const firstKey = Object.keys(errors).find((key) => key !== "_form");
+    if (firstKey) {
+      form.querySelector(`[name="${CSS.escape(firstKey)}"]`)?.focus();
+    }
+    return;
+  }
+
+  customTarget = {
+    ...values,
+    Sitio: "Custom target",
+    Referencias: "User-provided environmental parameters",
+    evaluados: provided,
+  };
+  activeTarget = customTarget;
+
+  const select = $("#target-select");
+  select.querySelector('option[value="custom"]')?.remove();
+  const option = document.createElement("option");
+  option.value = "custom";
+  option.textContent = "Custom target";
+  select.append(option);
+  select.value = "custom";
+
+  const note = $("#target-note");
+  if (note) {
+    note.textContent = `Custom target · ${provided} parameter${provided === 1 ? "" : "s"} defined`;
+    note.hidden = false;
+  }
+
+  closeDialog($("#custom-dialog"));
+  rankAndRender();
+}
+
+function closeDialog(dialog) {
+  if (dialog && dialog.open) dialog.close();
+}
+
+/* -------------------------------------------------------------------------- */
+/* Data loading and wiring                                                    */
+/* -------------------------------------------------------------------------- */
+
 async function loadData() {
+  if (apiAvailable) {
+    try {
+      const [targetsPayload, candidatesPayload] = await Promise.all([
+        fetchJson("/targets"),
+        fetchJson("/candidates"),
+      ]);
+      if (
+        !Array.isArray(targetsPayload?.targets) ||
+        !Array.isArray(candidatesPayload?.candidates)
+      ) {
+        throw new Error("The backend returned an unexpected dataset shape.");
+      }
+      targets = targetsPayload.targets;
+      earth = candidatesPayload.candidates;
+      updateCount();
+      return;
+    } catch (error) {
+      console.warn("Backend datasets unavailable, using local files:", error);
+      apiAvailable = false;
+      setDataSource("offline");
+    }
+  }
+
   try {
-    const [a, b] = await Promise.all([
+    const [targetResponse, earthResponse] = await Promise.all([
       fetch("data/objetivos_espaciales.json"),
       fetch("data/tierra_procesada.json"),
     ]);
-    if (!a.ok || !b.ok) throw Error();
-    targets = await a.json();
-    earth = await b.json();
-  } catch (e) {
+    if (!targetResponse.ok || !earthResponse.ok) {
+      throw new Error("The dataset could not be loaded.");
+    }
+
+    const targetData = await targetResponse.json();
+    const earthData = await earthResponse.json();
+    if (!Array.isArray(targetData) || !Array.isArray(earthData)) {
+      throw new Error("The dataset has an unexpected shape.");
+    }
+
+    targets = targetData;
+    earth = earthData;
+  } catch (error) {
+    console.warn("Using the bundled fallback dataset:", error);
     targets = FALLBACK_TARGETS;
     earth = FALLBACK_EARTH;
   }
-  document.querySelector("#candidate-count").textContent = `· ${earth.length} sites`;
+
+  updateCount();
 }
+
+function updateCount() {
+  const count = $("#candidate-count");
+  if (count) count.textContent = `· ${earth.length} sites`;
+}
+
+function bindRankingList() {
+  const list = $("#ranking-list");
+  if (!list) return;
+
+  function openSite(row) {
+    const site = ranked[Number(row.dataset.index)];
+    if (!site) return;
+    selectSite(site);
+    closeDialog($("#ranking-dialog"));
+  }
+
+  list.addEventListener("click", (event) => {
+    if (event.target.closest("[data-link]")) return;
+    const row = event.target.closest(".ranking-row");
+    if (row) openSite(row);
+  });
+
+  list.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const row = event.target.closest(".ranking-row");
+    if (!row) return;
+    event.preventDefault();
+    openSite(row);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+  theme = storedTheme();
+  applyTheme(theme, { persist: false });
+
+  await initBackend();
   await loadData();
-  document.querySelectorAll("[data-world]").forEach(
-    (button) =>
-      (button.onclick = () => {
-        document.querySelector("#welcome").classList.add("hidden");
-        document.querySelector("#app").classList.remove("hidden");
-        if (!map) initMap();
-        setWorld(button.dataset.world);
-        refreshMap();
-        setTimeout(refreshMap, 250);
-      }),
-  );
-  document.querySelector("#target-select").onchange = (e) => {
-    activeTarget = targetFor(activeWorld)[Number(e.target.value)];
-    rankAndRender();
-  };
-  document.querySelector("#custom-target").onclick = setupCustom;
-  document.querySelector("#close-detail").onclick = () =>
-    document.querySelector("#detail-panel").classList.remove("open");
-  document.querySelector("#ranking-button").onclick = () => {
-    renderRanking();
-    document.querySelector("#ranking-dialog").showModal();
-  };
-  document.querySelector("#close-ranking").onclick = () =>
-    document.querySelector("#ranking-dialog").close();
-  document.querySelector("#ranking-limit").onchange = renderRanking;
-  document.querySelector("#custom-form").onsubmit = (e) => {
-    if (e.submitter?.id !== "apply-custom") return;
-    const form = new FormData(e.target),
-      custom = {
-        Sitio: "Custom mission",
-        Referencias: "User-provided parameters",
-      };
-    Object.keys(PARAMS).forEach((key) => {
-      const value = form.get(key);
-      custom[key] = value === "" ? null : Number(value);
+
+  document.querySelectorAll("[data-world]").forEach((button) => {
+    button.addEventListener("click", () => {
+      $("#welcome").classList.add("hidden");
+      $("#app").classList.remove("hidden");
+      if (!map) initMap();
+      setWorld(button.dataset.world);
+      refreshMap();
+      setTimeout(refreshMap, 250);
     });
-    if (
-      custom["Temp_Max(C°)"] !== null &&
-      custom["Temp_Min(C°)"] !== null &&
-      custom["Amplitud_termica_(Delta_T)"] === null
-    )
-      custom["Amplitud_termica_(Delta_T)"] = custom["Temp_Max(C°)"] - custom["Temp_Min(C°)"];
-    activeTarget = custom;
+  });
+
+  $("#theme-toggle")?.addEventListener("click", () => {
+    applyTheme(theme === "dark" ? "light" : "dark");
+  });
+
+  $("#target-select")?.addEventListener("change", (event) => {
+    const value = event.target.value;
+    const note = $("#target-note");
+
+    if (value === "custom" && customTarget) {
+      activeTarget = customTarget;
+      if (note) {
+        const count = customTarget.evaluados ?? targetCoverage(customTarget);
+        note.textContent = `Custom target · ${count} parameter${count === 1 ? "" : "s"} defined`;
+        note.hidden = false;
+      }
+    } else {
+      activeTarget = targetFor(activeWorld)[Number(value)] || null;
+      if (note) {
+        note.hidden = true;
+        note.textContent = "";
+      }
+    }
+
     rankAndRender();
-  };
+  });
+
+  $("#custom-target")?.addEventListener("click", setupCustom);
+  $("#custom-form")?.addEventListener("submit", handleCustomSubmit);
+
+  document.querySelectorAll("[data-close-dialog]").forEach((button) => {
+    button.addEventListener("click", () => closeDialog(button.closest("dialog")));
+  });
+
+  $("#close-detail")?.addEventListener("click", () => {
+    $("#detail-panel")?.classList.remove("open");
+    selectedSite = null;
+    updateMarkerSelection();
+    highlightRankingSelection();
+  });
+
+  $("#ranking-button")?.addEventListener("click", () => {
+    renderRanking();
+    const dialog = $("#ranking-dialog");
+    if (dialog && !dialog.open) dialog.showModal();
+  });
+
+  $("#close-ranking")?.addEventListener("click", () =>
+    closeDialog($("#ranking-dialog")),
+  );
+
+  $("#ranking-limit")?.addEventListener("change", renderRanking);
+
+  bindRankingList();
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    const panel = $("#detail-panel");
+    if (panel?.classList.contains("open")) {
+      panel.classList.remove("open");
+      selectedSite = null;
+      updateMarkerSelection();
+      highlightRankingSelection();
+    }
+  });
 });

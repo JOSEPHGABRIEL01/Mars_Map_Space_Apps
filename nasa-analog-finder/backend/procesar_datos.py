@@ -39,13 +39,22 @@ def read_space_targets() -> None:
     )
 
 
-def _fallback(row: pd.Series) -> dict[str, float]:
+def _maybe_float(value: Any) -> float | None:
+    """Return a finite float or ``None``; missing data must stay missing."""
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _fallback(row: pd.Series) -> dict[str, float | None]:
     return {
-        "Temp_Max(C°)": float(row["Fallback_Temp_Max"]),
-        "Temp_Min(C°)": float(row["Fallback_Temp_Min"]),
-        "Pendiente°": float(row["Fallback_Pendiente"]),
-        "Indice_vegetacion(NDVI)": float(row["Fallback_NDVI"]),
-        "Azufres_Sulfatos": float(row["Fallback_Azufres_Sulfatos"]),
+        "Temp_Max(C°)": _maybe_float(row["Fallback_Temp_Max"]),
+        "Temp_Min(C°)": _maybe_float(row["Fallback_Temp_Min"]),
+        "Pendiente°": _maybe_float(row["Fallback_Pendiente"]),
+        "Indice_vegetacion(NDVI)": _maybe_float(row["Fallback_NDVI"]),
+        "Azufres_Sulfatos": _maybe_float(row["Fallback_Azufres_Sulfatos"]),
     }
 
 
@@ -128,28 +137,37 @@ def process_earth(live_api: bool = False) -> None:
         values = _fallback(row)
         if live_api:
             values.update({k: v for k, v in _live_metrics(row).items() if math.isfinite(v)})
-        values["Amplitud_termica_(Delta_T)"] = values["Temp_Max(C°)"] - values["Temp_Min(C°)"]
+        # Derive the thermal range only when both temperatures are known.
+        maximum = values["Temp_Max(C°)"]
+        minimum = values["Temp_Min(C°)"]
+        values["Amplitud_termica_(Delta_T)"] = (
+            maximum - minimum
+            if maximum is not None and minimum is not None
+            else None
+        )
         record = {
             "Sitio": row["Sitio"], "Pais_Region": row["Pais_Region"],
             "Tipo_Entorno": row["Tipo_Entorno"], "Tipo": "CANDIDATO_TIERRA",
             "Latitud": float(row["Latitud"]), "Longitud": float(row["Longitud"]),
-            **values, "Polvo/aerosoles": float(row["Polvo/aerosoles"]),
+            **values, "Polvo/aerosoles": _maybe_float(row["Polvo/aerosoles"]),
             "Imagen_URL": row["Imagen_URL"], "Referencias": REFERENCE,
         }
         records.append(record)
     result = pd.DataFrame(records)
     result[NUMERIC] = result[NUMERIC].apply(pd.to_numeric, errors="coerce")
-    result[NUMERIC] = result[NUMERIC].replace([np.inf, -np.inf], np.nan).fillna(0)
+    # Missing measurements stay null: a missing value must never be read as 0,
+    # because that would change the similarity score.
+    result[NUMERIC] = result[NUMERIC].replace([np.inf, -np.inf], np.nan)
     result.to_json(OUT / "tierra_procesada.json", orient="records", indent=2, force_ascii=False)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Genera los JSON estáticos del proyecto")
-    parser.add_argument("--live-api", action="store_true", help="Intenta consultar Planetary Computer")
+    parser = argparse.ArgumentParser(description="Regenerate the static JSON datasets")
+    parser.add_argument("--live-api", action="store_true", help="Try the Planetary Computer API")
     args = parser.parse_args()
     read_space_targets()
     process_earth(args.live_api)
-    print(f"Datos generados en {OUT}")
+    print(f"Datasets written to {OUT}")
 
 
 if __name__ == "__main__":
