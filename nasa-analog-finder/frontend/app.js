@@ -31,15 +31,12 @@ const ENVIRONMENT_EN = {
   "Caldera volcanica de alta montana": "High-mountain volcanic caldera",
   "Campos de lava basaltica y tubos volcanicos": "Basaltic lava fields and volcanic tubes",
   "Playas de sulfatos y yardangs eolicos": "Sulfate flats with wind-carved yardangs",
-  "Cuenca desertica extrema bajo el nivel del mar":
-    "Extreme desert basin below sea level",
-  "Crater de impacto cubierto por dunas eolicas":
-    "Impact crater covered by wind-blown dunes",
+  "Cuenca desertica extrema bajo el nivel del mar": "Extreme desert basin below sea level",
+  "Crater de impacto cubierto por dunas eolicas": "Impact crater covered by wind-blown dunes",
   "Crater de impacto en desierto arido": "Impact crater in an arid desert",
   "Terreno arcaico rico en oxidos de hierro y silice":
     "Archaic terrain rich in iron oxides and silica",
-  "Crater de impacto simple en el Sahara central":
-    "Simple impact crater in the central Sahara",
+  "Crater de impacto simple en el Sahara central": "Simple impact crater in the central Sahara",
   "Crater de impacto circular en el Sahara": "Circular impact crater in the Sahara",
   "Domo geologico erosionado con anillos concentricos":
     "Eroded geological dome with concentric rings",
@@ -49,8 +46,7 @@ const ENVIRONMENT_EN = {
     "Volcanic maar crater with phosphate and salt deposits",
   "Cuenca evaporitica hiperarida y abanicos aluviales":
     "Hyperarid evaporitic basin with alluvial fans",
-  "Estratos de arcillas esmectitas y oxidos de hierro":
-    "Smectite clay strata with iron oxides",
+  "Estratos de arcillas esmectitas y oxidos de hierro": "Smectite clay strata with iron oxides",
   "Campo de dunas de sulfato de calcio (yeso)": "Calcium sulfate (gypsum) dune field",
   "Lago alcalino hipersalino con torres de carbonato":
     "Hypersaline alkaline lake with carbonate towers",
@@ -60,17 +56,14 @@ const ENVIRONMENT_EN = {
   "Centros volcanicos subpolares en permafrost": "Subpolar volcanic centres in permafrost",
   "Permafrost polar con manantiales subcero de sulfatos":
     "Polar permafrost with subzero sulfate springs",
-  "Conos de escoria basaltica y fisuras volcanicas":
-    "Basaltic scoria cones and volcanic fissures",
+  "Conos de escoria basaltica y fisuras volcanicas": "Basaltic scoria cones and volcanic fissures",
   "Crater volcanico hiperacido rico en azufre nativo":
     "Hyperacid volcanic crater rich in native sulfur",
   "Crater fumarolico hiperacido de sulfatos": "Hyperacid fumarolic crater with sulfates",
-  "Cuenca sedimentaria arida con arcillas y cenizas":
-    "Arid sedimentary basin with clays and ash",
+  "Cuenca sedimentaria arida con arcillas y cenizas": "Arid sedimentary basin with clays and ash",
   "Mar de dunas activas y tormentas de polvo extremas":
     "Sea of active dunes with extreme dust storms",
-  "Cuenca arida fria con gran amplitud termica":
-    "Cold arid basin with a wide thermal range",
+  "Cuenca arida fria con gran amplitud termica": "Cold arid basin with a wide thermal range",
   "Fuente principal de tormentas de polvo y aerosoles en la Tierra":
     "Major source of dust storms and aerosols on Earth",
   "Planicie evaporitica de altura en la Puna": "High-altitude evaporitic plain in the Puna",
@@ -1288,9 +1281,7 @@ async function fetchJson(path, options = {}) {
       try {
         const payload = await response.json();
         detail =
-          payload.error ||
-          payload.errors?._form ||
-          JSON.stringify(payload.errors || payload);
+          payload.error || payload.errors?._form || JSON.stringify(payload.errors || payload);
       } catch (error) {
         detail = response.statusText;
       }
@@ -1320,9 +1311,7 @@ function setDataSource(source, extra = "") {
   const label = $("#data-source");
   if (label) {
     label.textContent =
-      source === "api"
-        ? `Live API${extra ? ` · ${extra}` : ""}`
-        : "Prototype · offline mode";
+      source === "api" ? `Live API${extra ? ` · ${extra}` : ""}` : "Prototype · offline mode";
   }
   const note = $("#welcome-note");
   if (note) {
@@ -1404,6 +1393,8 @@ let targets = [],
   theme = "dark",
   suppressMarkerClick = false;
 
+const CARTO_API_KEY = "cb1_59bd_1_83c56510fe43619d4f363556";
+
 const $ = (selector) => document.querySelector(selector);
 
 function displayWorld(world) {
@@ -1417,12 +1408,7 @@ function siteKey(site) {
 }
 
 function hasValue(value) {
-  return (
-    value !== null &&
-    value !== undefined &&
-    value !== "" &&
-    Number.isFinite(Number(value))
-  );
+  return value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
 }
 
 function escapeHtml(value) {
@@ -1478,10 +1464,7 @@ function applyTheme(next, { persist = true } = {}) {
   if (toggle) {
     toggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
     toggle.setAttribute("aria-pressed", String(theme === "dark"));
-    toggle.setAttribute(
-      "aria-label",
-      `Switch to ${theme === "dark" ? "light" : "dark"} mode`,
-    );
+    toggle.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} mode`);
   }
 
   // Keep the map readable in both themes: swap the CARTO dark layer for the
@@ -1573,12 +1556,15 @@ function initMap() {
   L.control.zoom({ position: "bottomright" }).addTo(map);
 
   baseLayers = {
-    dark: L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd",
-      maxZoom: 20,
-    }),
+    dark: L.tileLayer(
+      `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`,
+      {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: "abcd",
+        maxZoom: 20,
+      },
+    ),
     standard: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -1590,11 +1576,10 @@ function initMap() {
   activeBase.addTo(map);
 
   L.control
-    .layers(
-      { "Dark map": baseLayers.dark, "Standard map": baseLayers.standard },
-      null,
-      { position: "bottomright", collapsed: true },
-    )
+    .layers({ "Dark map": baseLayers.dark, "Standard map": baseLayers.standard }, null, {
+      position: "bottomright",
+      collapsed: true,
+    })
     .addTo(map);
 
   // A marker click that ends a map drag should never open a profile by mistake.
@@ -1695,9 +1680,7 @@ function selectSite(site, { fly = true, openPanel = true } = {}) {
 function updateMarkerSelection() {
   if (!markers) return;
   markers.eachLayer((marker) => {
-    const active = Boolean(
-      selectedSite && marker.siteKey === siteKey(selectedSite),
-    );
+    const active = Boolean(selectedSite && marker.siteKey === siteKey(selectedSite));
     marker.setZIndexOffset(active ? 1000 : 0);
     const element = marker.getElement();
     if (element) {
@@ -1710,9 +1693,7 @@ function updateMarkerSelection() {
 function highlightRankingSelection() {
   document.querySelectorAll(".ranking-row").forEach((row) => {
     const site = ranked[Number(row.dataset.index)];
-    const active = Boolean(
-      site && selectedSite && siteKey(site) === siteKey(selectedSite),
-    );
+    const active = Boolean(site && selectedSite && siteKey(site) === siteKey(selectedSite));
     row.classList.toggle("is-selected", active);
     row.setAttribute("aria-pressed", String(active));
   });
@@ -1788,9 +1769,7 @@ function showDetail(site) {
   const match = site.match || calcularSimilitud(site, activeTarget);
   const rank = ranked.findIndex((item) => siteKey(item) === siteKey(site)) + 1;
 
-  const entries = Object.entries(match.desglose).sort(
-    (a, b) => b[1].similitud - a[1].similitud,
-  );
+  const entries = Object.entries(match.desglose).sort((a, b) => b[1].similitud - a[1].similitud);
 
   const rows = entries
     .map(([key, value]) => {
@@ -1801,10 +1780,7 @@ function showDetail(site) {
 
   const strongest = entries
     .slice(0, 2)
-    .map(
-      ([key, value]) =>
-        `${PARAMS[key].label.toLowerCase()} (${value.similitud.toFixed(0)}%)`,
-    )
+    .map(([key, value]) => `${PARAMS[key].label.toLowerCase()} (${value.similitud.toFixed(0)}%)`)
     .join(" and ");
 
   const link = coordinateLink(site);
@@ -1851,8 +1827,7 @@ function renderRanking() {
   }
 
   if (!ranked.length) {
-    list.innerHTML =
-      '<p class="muted empty-hint">No candidates are available for this target.</p>';
+    list.innerHTML = '<p class="muted empty-hint">No candidates are available for this target.</p>';
     return;
   }
 
@@ -1862,14 +1837,10 @@ function renderRanking() {
       const strongest = Object.entries(site.match.desglose)
         .sort((a, b) => b[1].similitud - a[1].similitud)
         .slice(0, 2)
-        .map(
-          ([key, value]) => `${PARAMS[key].label} ${value.similitud.toFixed(0)}%`,
-        )
+        .map(([key, value]) => `${PARAMS[key].label} ${value.similitud.toFixed(0)}%`)
         .join(" · ");
       const link = coordinateLink(site);
-      const active = Boolean(
-        selectedSite && siteKey(selectedSite) === siteKey(site),
-      );
+      const active = Boolean(selectedSite && siteKey(selectedSite) === siteKey(site));
 
       return `<div class="ranking-row${active ? " is-selected" : ""}" data-index="${index}" role="button" tabindex="0" aria-pressed="${active}" aria-label="Show ${escapeHtml(site.Sitio)} on the map">
         <span class="rank-number">#${index + 1}</span>
@@ -1980,8 +1951,7 @@ function readCustomValues(form) {
   const values = {};
   PARAM_KEYS.forEach((key) => {
     const raw = data.get(key);
-    values[key] =
-      raw === null || String(raw).trim() === "" ? null : Number(raw);
+    values[key] = raw === null || String(raw).trim() === "" ? null : Number(raw);
   });
   return values;
 }
@@ -2008,8 +1978,7 @@ function validateValues(values) {
   const max = values["Temp_Max(C°)"];
   const min = values["Temp_Min(C°)"];
   if (Number.isFinite(max) && Number.isFinite(min) && max < min) {
-    errors["Temp_Max(C°)"] =
-      "Maximum temperature must be greater than or equal to the minimum.";
+    errors["Temp_Max(C°)"] = "Maximum temperature must be greater than or equal to the minimum.";
   }
 
   if (!provided && Object.keys(errors).length === 0) {
@@ -2045,8 +2014,7 @@ function handleCustomSubmit(event) {
     Number.isFinite(values["Temp_Max(C°)"]) &&
     Number.isFinite(values["Temp_Min(C°)"])
   ) {
-    values["Amplitud_termica_(Delta_T)"] =
-      values["Temp_Max(C°)"] - values["Temp_Min(C°)"];
+    values["Amplitud_termica_(Delta_T)"] = values["Temp_Max(C°)"] - values["Temp_Min(C°)"];
   }
 
   const { errors, provided } = validateValues(values);
@@ -2239,9 +2207,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (dialog && !dialog.open) dialog.showModal();
   });
 
-  $("#close-ranking")?.addEventListener("click", () =>
-    closeDialog($("#ranking-dialog")),
-  );
+  $("#close-ranking")?.addEventListener("click", () => closeDialog($("#ranking-dialog")));
 
   $("#ranking-limit")?.addEventListener("change", renderRanking);
 
