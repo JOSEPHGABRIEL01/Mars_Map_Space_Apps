@@ -308,78 +308,133 @@
         <aside id="mission-menu" class="mission-menu" aria-label="Mission target">
           <header class="menu-head">
             <p class="eyebrow">Mission reference</p>
-            <span id="menu-world-index" class="menu-index" aria-hidden="true">01</span>
+            <span class="menu-head-actions">
+              <span id="menu-world-index" class="menu-index" aria-hidden="true">01</span>
+              <button
+                type="button"
+                id="menu-toggle"
+                class="menu-toggle"
+                aria-expanded="true"
+                aria-controls="mission-menu-body"
+                aria-label="Collapse mission reference"
+                title="Collapse mission reference"
+              >
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="m4 10 4-4 4 4"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </span>
           </header>
 
-          <label class="field-label" for="target-select">Target site</label>
-          <div class="select-shell">
-            <select id="target-select"></select>
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="m4 6 4 4 4-4"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-          <p id="target-note" class="target-note" hidden></p>
+          <div id="mission-menu-body" class="menu-body">
+            <label class="field-label" for="target-select">Target site</label>
+            <div class="select-shell">
+              <select id="target-select"></select>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="m4 6 4 4 4-4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <p id="target-note" class="target-note" hidden></p>
 
-          <label class="field-label" for="result-limit">Visible analogs</label>
-          <div class="select-shell">
-            <select id="result-limit">
-              <option value="50">Top 50</option>
-              <option value="100">Top 100</option>
-              <option value="500">Top 500</option>
-              <option value="1000">Top 1000</option>
-              <option value="all" selected>All places</option>
-            </select>
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="m4 6 4 4 4-4"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
+            <label class="field-label" for="result-limit">Visible analogs</label>
+            <div class="select-shell">
+              <select id="result-limit">
+                <option value="50" selected>Top 50</option>
+                <option value="100">Top 100</option>
+                <option value="500">Top 500</option>
+                <option value="1000">Top 1000</option>
+                <option value="all">All places</option>
+              </select>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="m4 6 4 4 4-4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
 
-          <dl class="target-facts">
-            <div class="fact">
-              <dt>World</dt>
-              <dd id="fact-body">Moon</dd>
-            </div>
-            <div class="fact">
-              <dt>Coordinates</dt>
-              <dd id="fact-coords">—</dd>
-            </div>
-            <div class="fact">
-              <dt>Parameters</dt>
-              <dd id="fact-params">—</dd>
-            </div>
-            <div class="fact fact--wide">
-              <dt>Closest Earth analog</dt>
-              <dd id="fact-best">—</dd>
-            </div>
-          </dl>
+            <dl class="target-facts">
+              <div class="fact">
+                <dt>World</dt>
+                <dd id="fact-body">Moon</dd>
+              </div>
+              <div class="fact">
+                <dt>Coordinates</dt>
+                <dd id="fact-coords">—</dd>
+              </div>
+              <div class="fact">
+                <dt>Parameters</dt>
+                <dd id="fact-params">—</dd>
+              </div>
+              <div class="fact fact--wide">
+                <dt>Closest Earth analog</dt>
+                <dd id="fact-best">—</dd>
+              </div>
+            </dl>
 
-          <div class="menu-actions">
-            <button type="button" id="custom-target" class="custom">
-              <span class="action-symbol" aria-hidden="true">＋</span>
-              Custom target
-            </button>
-            <button type="button" id="ranking-button" class="ranking-button">
-              Ranking
-              <span id="ranking-count" class="action-count">50</span>
-            </button>
+            <div class="menu-actions">
+              <button type="button" id="custom-target" class="custom">
+                <span class="action-symbol" aria-hidden="true">＋</span>
+                Custom target
+              </button>
+              <button type="button" id="ranking-button" class="ranking-button">
+                Ranking
+                <span id="ranking-count" class="action-count">50</span>
+              </button>
+            </div>
           </div>
         </aside>
 
         <aside id="detail-panel" class="detail-panel" aria-label="Location details">
           <button type="button" id="close-detail" class="close" aria-label="Close details">
             ×
+          </button>
+          <button
+            type="button"
+            id="detail-toggle"
+            class="panel-toggle"
+            aria-expanded="true"
+            aria-controls="detail-content"
+            aria-label="Minimize site dossier"
+            title="Minimize site dossier"
+          >
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="m4 10 4-4 4 4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <button type="button" id="detail-mini" class="detail-mini">
+            <span id="detail-mini-title" class="detail-mini__title">Site dossier</span>
+            <span id="detail-mini-score" class="detail-mini__score"></span>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="m4 6 4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </button>
           <div id="detail-content">
             <p class="muted empty-hint">
@@ -436,8 +491,8 @@
               Show
               <select id="ranking-limit">
                 <option value="5">Top 5</option>
-                <option value="10" selected>Top 10</option>
-                <option value="50">Top 50</option>
+                <option value="10">Top 10</option>
+                <option value="50" selected>Top 50</option>
                 <option value="100">Top 100</option>
                 <option value="500">Top 500</option>
                 <option value="1000">Top 1000</option>

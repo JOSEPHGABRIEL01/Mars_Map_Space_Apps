@@ -1166,6 +1166,58 @@ html[data-theme="light"] .world-switch button.is-active {
   letter-spacing: 0.06em;
 }
 
+.menu-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.menu-toggle,
+.panel-toggle {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.menu-toggle:hover,
+.panel-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.menu-toggle svg,
+.panel-toggle svg {
+  transition: transform 0.2s ease;
+}
+
+.mission-menu.is-collapsed .menu-toggle svg,
+.detail-panel.is-collapsed .panel-toggle svg {
+  transform: rotate(180deg);
+}
+
+.mission-menu.is-collapsed {
+  max-height: none;
+}
+
+.mission-menu.is-collapsed .menu-body {
+  display: none;
+}
+
+.mission-menu.is-collapsed .menu-head {
+  border-bottom: 0;
+}
+
 .field-label {
   display: block;
   margin: 14px 16px 6px;
@@ -1362,6 +1414,72 @@ html[data-theme="light"] .menu-actions {
 
 .detail-panel.open {
   transform: none;
+}
+
+/* Collapsed dossier: keep a compact bar so the map stays usable. */
+.detail-panel.is-collapsed {
+  top: auto;
+  bottom: 16px;
+  height: auto;
+  width: min(340px, calc(100vw - 32px));
+}
+
+.detail-panel.is-collapsed #detail-content {
+  display: none;
+}
+
+.panel-toggle {
+  position: absolute;
+  right: 50px;
+  top: 12px;
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  border-color: var(--line-strong);
+  background: var(--map-overlay);
+  backdrop-filter: blur(8px);
+}
+
+.detail-mini {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 92px 10px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.detail-panel.is-collapsed .detail-mini {
+  display: flex;
+}
+
+.detail-mini__title {
+  overflow: hidden;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-mini__score {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.detail-mini svg {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--muted);
 }
 
 #detail-content {
@@ -2399,6 +2517,16 @@ input::placeholder {
 
   .detail-panel.open {
     transform: none;
+  }
+
+  .detail-panel.is-collapsed {
+    right: 12px;
+    width: auto;
+    max-height: none;
+  }
+
+  .detail-mini {
+    padding-right: 92px;
   }
 
   .legend {

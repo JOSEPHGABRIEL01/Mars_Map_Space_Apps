@@ -1447,7 +1447,7 @@ let targets = [],
   baseLayers = null,
   activeBase = null,
   theme = "dark",
-  visibleLimit = "all",
+  visibleLimit = "50",
   suppressMarkerClick = false;
 
 const $ = (selector) => document.querySelector(selector);
@@ -1748,6 +1748,9 @@ function fitCandidates() {
 function setWorld(world) {
   activeWorld = world;
   customTarget = null;
+  // Each world starts with the lightweight default view. Users can still
+  // request 100, 500, or all places from the mission reference menu.
+  visibleLimit = "50";
 
   const label = $("#active-world");
   if (label) label.textContent = displayWorld(world);
@@ -1766,6 +1769,8 @@ function setWorld(world) {
   select.innerHTML = options
     .map((item, index) => `<option value="${index}">${escapeHtml(item.Sitio)}</option>`)
     .join("");
+  const resultLimit = $("#result-limit");
+  if (resultLimit) resultLimit.value = visibleLimit;
 
   const note = $("#target-note");
   if (note) {
@@ -1971,6 +1976,12 @@ function showDetail(site) {
   const match = site.match || calcularSimilitud(site, activeTarget);
   const rank = ranked.findIndex((item) => siteKey(item) === siteKey(site)) + 1;
 
+  // Keep the mobile map usable when the first candidate is selected
+  // automatically. The compact bar still provides an obvious way to reopen
+  // the dossier when its details are needed.
+  const isMobile = window.matchMedia("(max-width: 720px)").matches;
+  panel.classList.toggle("is-collapsed", isMobile);
+
   const entries = Object.entries(match.desglose).sort(
     (a, b) => b[1].similitud - a[1].similitud,
   );
@@ -1996,6 +2007,11 @@ function showDetail(site) {
     rank && ranked.length
       ? `Rank ${rank} of ${ranked.length}`
       : "Unranked candidate";
+
+  const miniTitle = $("#detail-mini-title");
+  if (miniTitle) miniTitle.textContent = site.Sitio || "Site dossier";
+  const miniScore = $("#detail-mini-score");
+  if (miniScore) miniScore.textContent = `${match.total.toFixed(1)}%`;
   const gravityNote =
     activeWorld === "Marte"
       ? "Earth gravity is 1g versus 0.38g on Mars."
@@ -2466,6 +2482,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#app")?.classList.remove("hidden");
     if (!map) initMap();
     setWorld(world);
+    if (window.matchMedia("(max-width: 720px)").matches) {
+      $("#mission-menu")?.classList.add("is-collapsed");
+      $("#menu-toggle")?.setAttribute("aria-expanded", "false");
+    }
     refreshMap();
     setTimeout(refreshMap, 250);
   }
@@ -2532,6 +2552,48 @@ document.addEventListener("DOMContentLoaded", async () => {
     selectedSite = null;
     updateMarkerSelection();
     highlightRankingSelection();
+  });
+
+  // Both map overlays have a compact state so they never need to occupy the
+  // map permanently, especially on narrow screens.
+  $("#menu-toggle")?.addEventListener("click", (event) => {
+    const menu = $("#mission-menu");
+    if (!menu) return;
+    const collapsed = menu.classList.toggle("is-collapsed");
+    const button = event.currentTarget;
+    button.setAttribute("aria-expanded", String(!collapsed));
+    button.setAttribute(
+      "aria-label",
+      collapsed ? "Expand mission reference" : "Collapse mission reference",
+    );
+    button.setAttribute(
+      "title",
+      collapsed ? "Expand mission reference" : "Collapse mission reference",
+    );
+  });
+
+  function setDetailCollapsed(collapsed) {
+    const panel = $("#detail-panel");
+    const toggle = $("#detail-toggle");
+    if (!panel) return;
+    panel.classList.toggle("is-collapsed", collapsed);
+    toggle?.setAttribute("aria-expanded", String(!collapsed));
+    toggle?.setAttribute(
+      "aria-label",
+      collapsed ? "Expand site dossier" : "Minimize site dossier",
+    );
+    toggle?.setAttribute(
+      "title",
+      collapsed ? "Expand site dossier" : "Minimize site dossier",
+    );
+  }
+
+  $("#detail-toggle")?.addEventListener("click", () => {
+    setDetailCollapsed(!$("#detail-panel")?.classList.contains("is-collapsed"));
+  });
+
+  $("#detail-mini")?.addEventListener("click", () => {
+    setDetailCollapsed(false);
   });
 
   $("#ranking-button")?.addEventListener("click", () => {
