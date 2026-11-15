@@ -1,6 +1,5 @@
 import L from "leaflet";
-import "@fontsource-variable/space-grotesk";
-import "@fontsource-variable/inter";
+import "@fontsource-variable/ibm-plex-sans";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import targetData from "./data/objetivos_espaciales.json";
