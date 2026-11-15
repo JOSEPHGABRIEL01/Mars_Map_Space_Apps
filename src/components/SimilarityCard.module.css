@@ -1,0 +1,156 @@
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  transition: border-color var(--transition-fast), transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--color-border-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.selected {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 0 1px rgba(67, 217, 242, 0.35), var(--shadow-glow);
+}
+
+.button {
+  display: grid;
+  grid-template-columns: auto 96px 1fr;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.rank {
+  align-self: flex-start;
+  padding-top: var(--space-1);
+  color: var(--color-text-subtle);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.image {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+
+.score {
+  flex-shrink: 0;
+  color: var(--color-cyan);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.location {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.coordinates {
+  color: var(--color-text-subtle);
+  font-size: 0.74rem;
+}
+
+.rationale {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.tierLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.high .tierLabel {
+  color: var(--color-success);
+}
+
+.medium .tierLabel {
+  color: var(--color-warning);
+}
+
+.low .tierLabel {
+  color: var(--color-text-muted);
+}
+
+.mapHint {
+  color: var(--color-cyan);
+  font-size: 0.74rem;
+}
+
+@media (max-width: 620px) {
+  .button {
+    grid-template-columns: 64px 1fr;
+    grid-template-areas:
+      'image body'
+      'rank body';
+  }
+
+  .rank {
+    grid-area: rank;
+  }
+
+  .image {
+    grid-area: image;
+    width: 64px;
+    height: 64px;
+  }
+
+  .body {
+    grid-area: body;
+  }
+
+  .nameRow {
+    flex-direction: column;
+    gap: 0;
+  }
+}

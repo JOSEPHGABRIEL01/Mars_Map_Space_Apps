@@ -30,25 +30,27 @@ Useful scripts:
 
 ## 2. Branch strategy
 
-| Branch            | Purpose                                    |
-| ----------------- | ------------------------------------------ |
-| `main`            | Stable, demoable code. Protected.          |
-| `roger`           | Roger’s personal working branch            |
-| `feat/<name>`     | New component or feature                   |
-| `fix/<name>`      | Bug fix                                    |
-| `docs/<name>`     | Documentation only                         |
-| `chore/<name>`    | Tooling, dependencies, configuration       |
+| Branch                    | Purpose                                      |
+| ------------------------- | -------------------------------------------- |
+| `worlds-map-development`  | Integration branch (acts as the main line)   |
+| `roger`                   | Roger’s personal working branch              |
+| `main`                    | Legacy branch, not used for new work         |
+| `feat/<name>`             | New component or feature                     |
+| `fix/<name>`              | Bug fix                                      |
+| `docs/<name>`             | Documentation only                           |
+| `chore/<name>`            | Tooling, dependencies, configuration         |
 
 Rules:
 
 1. Never commit directly to `main`.
-2. Keep your branch focused on one feature or component.
-3. Rebase or merge `main` into your branch before opening a PR.
-4. Pull requests are merged only after review (squash merge preferred).
+2. Coordinate before pushing to `worlds-map-development`; open a PR or merge request.
+3. Keep your branch focused on one feature or component.
+4. Rebase or merge `worlds-map-development` into your branch before opening a PR.
+5. Pull requests are merged only after review (squash merge preferred).
 
 ```bash
 # start working
-git switch main
+git switch worlds-map-development
 git pull
 git switch -c feat/earth-map
 
@@ -79,23 +81,25 @@ the component’s author.
 
 | Area / file                          | Owner        | Notes                                  |
 | ------------------------------------ | ------------ | -------------------------------------- |
-| `src/App.jsx`                        | Roger        | Application shell and stage flow       |
-| `src/main.jsx`                       | Roger        | Entry point                            |
-| `src/styles/variables.css`           | Roger        | Design tokens (Figma values go here)   |
+| `src/App.jsx`                        | Roger        | Application shell and navigation       |
+| `src/main.jsx`                       | Roger        | Entry point and Leaflet CSS import     |
+| `src/styles/variables.css`           | Roger        | Design tokens                          |
 | `src/styles/global.css`              | Roger        | Global reset/base                      |
 | `package.json` / lockfile            | Roger        | Dependency changes via PR only         |
-| `src/data/**`                        | Roger        | Demo dataset and selectors             |
-| `src/services/mockApi.js`            | Roger        | Mock backend                           |
+| `src/data/**`                        | Roger        | Demo dataset, coordinates, selectors   |
+| `src/services/**`                    | Roger        | Mock backend and similarity engine     |
+| `src/utils/**`                       | Roger        | Geo, search and similarity helpers     |
+| `src/components/Explorer.*`          | Roger        | Search → analyze → compare flow        |
+| `src/components/PlanetarySearch.*`   | Roger        | Body tabs, name search, mode switch    |
+| `src/components/CoordinateSearch.*`  | Roger        | Manual coordinate validation           |
+| `src/components/FeatureProfile.*`    | Roger        | Feature profile / curriculum           |
+| `src/components/SimilarityResults.*` | Roger        | Threshold control and ordered list     |
+| `src/components/SimilarityCard.*`    | Roger        | Single Earth analogue card             |
+| `src/components/EarthMap.*`          | Katia / Roger | Leaflet map (Katia’s base, sync added) |
+| `src/components/ChallengeFooter.*`   | Roger        | Challenge, proposal and disclaimer     |
 | `src/components/Navbar.*`            | _unassigned_ |                                        |
 | `src/components/WelcomeScreen.*`     | _unassigned_ |                                        |
 | `src/components/CelestialBodySelector.*` | _unassigned_ |                                    |
-| `src/components/RegionSelector.*`    | _unassigned_ |                                        |
-| `src/components/EarthMap.*`          | _unassigned_ | Needs the final map asset              |
-| `src/components/MapMarker.*`         | _unassigned_ |                                        |
-| `src/components/LocationDetails.*`   | _unassigned_ |                                        |
-| `src/components/SimilarityResults.*` | _unassigned_ |                                        |
-| `src/components/CoordinateSearch.*`  | _unassigned_ |                                        |
-| `src/components/AboutSection.*`      | _unassigned_ |                                        |
 
 Update the “Owner” column when the team splits the work. If two people need to
 touch the same file, coordinate first and merge in small steps.
@@ -134,20 +138,38 @@ touch the same file, coordinate first and merge in small steps.
 - `src/data/**` is **demo data**. Every screen that shows it must communicate
   that it is not a scientific result (see `DATA_DISCLAIMER`).
 - Never present invented similarity scores as real science.
-- Numeric scores live in the `matches` array of each location, 0–100.
-- Coordinates use decimal degrees (WGS84), latitude first.
+- Numeric scores live in the `matches` array of each Earth location, 0–100.
+- Base planetary records live in `regions.js`; search metadata lives in
+  `planetaryFeatures.js`.
+- Coordinates use decimal degrees, latitude first:
+  - Moon and Mars: planetocentric latitude −90…90, east-positive longitude −180…180.
+  - 0…360 east longitude is accepted by the coordinate form and normalised.
+  - Systems are documented per body in `src/data/coordinateSystems.js`.
 - Run `npm run validate:data` after any change to the dataset.
-- The map uses an equirectangular projection; convert coordinates with
-  `projectToMap()` from `src/utils/geo.js` instead of storing pixel positions.
+- Components must consume `src/services/planetarySearchService.js`, not the data files
+  directly. The threshold is applied with `filterByMinimumSimilarity`.
+- The Leaflet map uses GeoJSON-style `{ lat, lng }` coordinates; never store pixel
+  positions.
 
-## 7. Adding a demo location
+## 7. Adding a demo location or feature
+
+### Earth location
 
 1. Add an object to `src/data/earthLocations.js` following the existing model.
 2. Point `image` to `/images/locations/<slug>.svg`.
 3. Generate the placeholder: `npm run assets:placeholders`.
-4. Add at least one entry to `matches` using a valid `regionId`.
+4. Add at least one entry to `matches` using a valid feature ID.
 5. Run `npm run validate:data` and `npm run build`.
 6. Commit with `feat: add <location> demo location`.
+
+### Moon / Mars feature
+
+1. Add the base record to `src/data/regions.js` (or `planetaryFeatures.js` if it will
+   not be reused elsewhere).
+2. Add aliases, `missionContext` and `dataLayers` in `planetaryFeatures.js`.
+3. Add at least one Earth `match` pointing to the new feature ID.
+4. Check the name search: `searchFeatures` must resolve the name and aliases.
+5. Run `npm run validate:data` and `npm run build`.
 
 ## 8. Definition of done (PR checklist)
 

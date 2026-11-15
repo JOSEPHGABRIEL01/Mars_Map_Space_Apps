@@ -1,6 +1,6 @@
 /**
- * Generates the provisional SVG placeholders used while the final Figma
- * assets are not ready:
+ * Generates the provisional SVG placeholders used while the final assets are
+ * not ready:
  *
  *   - public/images/earth-map.svg              equirectangular graticule
  *   - public/images/bodies/<body>.svg          Moon / Mars cards
@@ -71,7 +71,7 @@ function buildEarthMapSvg() {
   </g>
   <g fill="#35e0f2" font-family="Space Grotesk, sans-serif" text-anchor="middle" opacity="0.55">
     <text x="${width / 2}" y="${height / 2 - 10}" font-size="34">DEMO EARTH MAP</text>
-    <text x="${width / 2}" y="${height / 2 + 26}" font-size="18">Equirectangular placeholder · replace with the final Figma asset</text>
+    <text x="${width / 2}" y="${height / 2 + 26}" font-size="18">Equirectangular placeholder · replace with the final asset</text>
   </g>
 </svg>
 `
@@ -107,28 +107,136 @@ function buildBodySvg(body, index) {
 `
 }
 
+function hashString(value) {
+  let hash = 2166136261
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index)
+    hash = Math.imul(hash, 16777619)
+  }
+  return hash >>> 0
+}
+
+function createRandom(seed) {
+  let state = seed || 1
+  return () => {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0
+    return state / 4294967296
+  }
+}
+
+function pickPalette(location) {
+  const text = `${location.environment?.join(' ') ?? ''} ${location.summary ?? ''}`.toLowerCase()
+
+  if (/(polar|ice|glacier|permafrost|snow|antarctic)/.test(text)) {
+    return {
+      skyTop: '#071226',
+      skyBottom: '#2b5a82',
+      sun: '#d8f2ff',
+      ridgeBack: '#3d6b8c',
+      ridgeFront: '#183349',
+      ground: '#0a1929',
+    }
+  }
+
+  if (/(volcan|basalt|lava|geothermal|sulfate)/.test(text)) {
+    return {
+      skyTop: '#130a16',
+      skyBottom: '#5c2a24',
+      sun: '#ffb17a',
+      ridgeBack: '#41232c',
+      ridgeFront: '#1e0f14',
+      ground: '#0c0609',
+    }
+  }
+
+  if (/(arid|desert|dry|salt|evaporite|dune)/.test(text)) {
+    return {
+      skyTop: '#0c1526',
+      skyBottom: '#6b412c',
+      sun: '#f7c15c',
+      ridgeBack: '#5a4035',
+      ridgeFront: '#2c211f',
+      ground: '#171011',
+    }
+  }
+
+  return {
+    skyTop: '#061322',
+    skyBottom: '#1f5060',
+    sun: '#e8f0ff',
+    ridgeBack: '#2f5a66',
+    ridgeFront: '#123039',
+    ground: '#071a20',
+  }
+}
+
+function buildRidge(random, baseline, amplitude, steps) {
+  const width = 800
+  const points = []
+
+  for (let index = 0; index <= steps; index += 1) {
+    const x = (width / steps) * index
+    const wave = Math.sin(index * 1.35 + random() * 0.8) * amplitude
+    const jitter = (random() - 0.5) * amplitude * 0.9
+    points.push([x, baseline + wave + jitter])
+  }
+
+  const path = points
+    .map(([x, y], index) => `${index === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`)
+    .join(' ')
+
+  return `${path} L${width} 500 L0 500 Z`
+}
+
 function buildLocationSvg(location) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Demo image for ${escapeXml(location.name)}">
+  const random = createRandom(hashString(location.id))
+  const palette = pickPalette(location)
+  const backRidge = buildRidge(random, 300, 46, 9)
+  const frontRidge = buildRidge(random, 372, 34, 7)
+  const sunX = 560 + random() * 120
+  const sunY = 120 + random() * 50
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Demo landscape for ${escapeXml(location.name)}">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0b1533" />
-      <stop offset="1" stop-color="#101d42" />
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${palette.skyTop}" />
+      <stop offset="1" stop-color="${palette.skyBottom}" />
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="${palette.sun}" stop-opacity="0.85" />
+      <stop offset="0.35" stop-color="${palette.sun}" stop-opacity="0.22" />
+      <stop offset="1" stop-color="${palette.sun}" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${palette.ridgeFront}" />
+      <stop offset="1" stop-color="${palette.ground}" />
     </linearGradient>
   </defs>
-  <rect width="800" height="500" fill="url(#bg)" />
-  <g fill="none" stroke="#2f6bff" stroke-opacity="0.35">
-    <circle cx="400" cy="230" r="190" />
-    <circle cx="400" cy="230" r="150" />
-    <circle cx="400" cy="230" r="110" />
-    <path d="M0 230 H800 M400 0 V500" />
+
+  <rect width="800" height="500" fill="url(#sky)" />
+  <circle cx="${sunX}" cy="${sunY}" r="150" fill="url(#sunGlow)" />
+  <circle cx="${sunX}" cy="${sunY}" r="34" fill="${palette.sun}" opacity="0.9" />
+
+  <g fill="#ffffff" opacity="0.5">
+    <circle cx="90" cy="70" r="1.6" />
+    <circle cx="180" cy="120" r="1.2" />
+    <circle cx="280" cy="52" r="1.4" />
+    <circle cx="380" cy="90" r="1" />
+    <circle cx="470" cy="44" r="1.5" />
+    <circle cx="690" cy="70" r="1.2" />
+    <circle cx="740" cy="130" r="1" />
   </g>
-  <g stroke="#35e0f2" stroke-opacity="0.5" stroke-width="2">
-    <path d="M120 380 L240 300 L330 340 L470 250 L590 300 L700 230" fill="none" />
+
+  <path d="${backRidge}" fill="${palette.ridgeBack}" opacity="0.65" />
+  <path d="${frontRidge}" fill="url(#ground)" />
+  <rect y="392" width="800" height="108" fill="${palette.ground}" opacity="0.7" />
+
+  <g font-family="Space Grotesk, Inter, sans-serif">
+    <rect x="36" y="34" width="86" height="26" rx="13" fill="#060b18" opacity="0.55" />
+    <text x="79" y="52" fill="${palette.sun}" font-size="12" letter-spacing="3" text-anchor="middle">DEMO</text>
+    <text x="40" y="448" fill="#f0f5ff" font-size="30" font-weight="600">${escapeXml(location.name)}</text>
+    <text x="40" y="476" fill="#9baec9" font-size="16" letter-spacing="1">${escapeXml(location.country)}</text>
   </g>
-  <text x="60" y="80" fill="#35e0f2" font-family="Space Grotesk, sans-serif" font-size="18" letter-spacing="6">DEMO IMAGE</text>
-  <text x="60" y="140" fill="#e8f0ff" font-family="Space Grotesk, sans-serif" font-size="40">${escapeXml(location.name)}</text>
-  <text x="60" y="180" fill="#9fb0d0" font-family="Inter, sans-serif" font-size="20">${escapeXml(location.country)}</text>
-  <text x="60" y="440" fill="#9fb0d0" font-family="Inter, sans-serif" font-size="16" opacity="0.8">Placeholder — replace with a real photo.</text>
 </svg>
 `
 }

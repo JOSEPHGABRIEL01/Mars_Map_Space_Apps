@@ -1,0 +1,213 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, var(--color-surface), var(--color-bg-elevated));
+  box-shadow: var(--shadow-md);
+}
+
+.kicker {
+  color: var(--color-cyan);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+}
+
+.tabs {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 3px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: rgba(6, 11, 24, 0.6);
+}
+
+.tab {
+  padding: 0.4rem 1rem;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tabActive {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.panelBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.inputRow {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: rgba(6, 11, 24, 0.7);
+  color: var(--color-text);
+}
+
+.input::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.input:focus {
+  border-color: var(--color-cyan);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(67, 217, 242, 0.15);
+}
+
+.submit {
+  padding: 0.65rem 1.2rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: #ffffff;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background var(--transition-fast);
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--color-accent-strong);
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.error {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgba(255, 113, 133, 0.4);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 113, 133, 0.08);
+  color: var(--color-danger);
+  font-size: 0.85rem;
+}
+
+.hint {
+  color: var(--color-text-subtle);
+  font-size: 0.78rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--color-cyan);
+  color: var(--color-text);
+}
+
+.chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.candidates {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.candidatesTitle {
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.candidateList {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.candidateButton {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(6, 11, 24, 0.5);
+  text-align: left;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.candidateButton:hover {
+  border-color: var(--color-cyan);
+  background: var(--color-surface-hover);
+}
+
+.candidateName {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.candidateMeta {
+  color: var(--color-text-subtle);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 620px) {
+  .inputRow {
+    flex-direction: column;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}

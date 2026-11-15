@@ -48,3 +48,16 @@ export function getBestMatch(items, key = 'similarity') {
   const sorted = sortBySimilarity(items, key)
   return sorted[0] ?? null
 }
+
+/**
+ * Keep only the items whose similarity reaches the minimum threshold.
+ * The threshold is clamped to 0–100 so callers cannot break the UI.
+ */
+export function filterByMinimumSimilarity(items, minimumSimilarity = 0) {
+  const threshold = Number.isFinite(minimumSimilarity)
+    ? Math.min(Math.max(minimumSimilarity, 0), 100)
+    : 0
+
+  return items.filter((item) => clampSimilarity(item.similarity) >= threshold)
+}
+

@@ -136,3 +136,26 @@ export function haversineDistanceKm(a, b) {
 
   return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h))
 }
+
+/**
+ * Angular distance in degrees between two coordinates on the same sphere.
+ * Works for Earth, Moon and Mars (the radius is applied later if needed).
+ */
+export function angularDistanceDeg(a, b) {
+  const toRadians = (degrees) => (degrees * Math.PI) / 180
+  const dLat = toRadians(b.lat - a.lat)
+  const dLng = toRadians(b.lng - a.lng)
+  const lat1 = toRadians(a.lat)
+  const lat2 = toRadians(b.lat)
+
+  const h =
+    Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+
+  return (2 * Math.asin(Math.min(1, Math.sqrt(h))) * 180) / Math.PI
+}
+
+/** Convert an angular distance in degrees to kilometres on a sphere. */
+export function angularDistanceToKm(degrees, radiusKm) {
+  return (degrees * Math.PI * radiusKm) / 180
+}
+

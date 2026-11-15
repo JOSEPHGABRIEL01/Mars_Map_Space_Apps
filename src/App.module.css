@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------------- */
-/* PROVISIONAL LAYOUT                                                         */
-/* Functionality demo only. These styles are intentionally neutral and will   */
-/* be replaced by the Figma design. Tokens live in src/styles/variables.css.  */
+/* APPLICATION SHELL                                                          */
+/* Shared layout. Screen-specific styles live in each component's module.     */
+/* Tokens live in src/styles/variables.css.                                   */
 /* ------------------------------------------------------------------------- */
 
 .app {
@@ -342,6 +342,14 @@
   border-top: 1px solid var(--color-border);
   color: var(--color-text-muted);
   font-size: 0.75rem;
+  text-align: center;
+}
+
+.demoFooter {
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-subtle);
+  font-size: 0.7rem;
   text-align: center;
 }
 /* ========================================

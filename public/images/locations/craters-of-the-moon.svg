@@ -1,22 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Demo image for Craters of the Moon">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Demo landscape for Craters of the Moon">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0b1533" />
-      <stop offset="1" stop-color="#101d42" />
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#130a16" />
+      <stop offset="1" stop-color="#5c2a24" />
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffb17a" stop-opacity="0.85" />
+      <stop offset="0.35" stop-color="#ffb17a" stop-opacity="0.22" />
+      <stop offset="1" stop-color="#ffb17a" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e0f14" />
+      <stop offset="1" stop-color="#0c0609" />
     </linearGradient>
   </defs>
-  <rect width="800" height="500" fill="url(#bg)" />
-  <g fill="none" stroke="#2f6bff" stroke-opacity="0.35">
-    <circle cx="400" cy="230" r="190" />
-    <circle cx="400" cy="230" r="150" />
-    <circle cx="400" cy="230" r="110" />
-    <path d="M0 230 H800 M400 0 V500" />
+
+  <rect width="800" height="500" fill="url(#sky)" />
+  <circle cx="656.1068000644445" cy="153.21059428853914" r="150" fill="url(#sunGlow)" />
+  <circle cx="656.1068000644445" cy="153.21059428853914" r="34" fill="#ffb17a" opacity="0.9" />
+
+  <g fill="#ffffff" opacity="0.5">
+    <circle cx="90" cy="70" r="1.6" />
+    <circle cx="180" cy="120" r="1.2" />
+    <circle cx="280" cy="52" r="1.4" />
+    <circle cx="380" cy="90" r="1" />
+    <circle cx="470" cy="44" r="1.5" />
+    <circle cx="690" cy="70" r="1.2" />
+    <circle cx="740" cy="130" r="1" />
   </g>
-  <g stroke="#35e0f2" stroke-opacity="0.5" stroke-width="2">
-    <path d="M120 380 L240 300 L330 340 L470 250 L590 300 L700 230" fill="none" />
+
+  <path d="M0.0 332.5 L88.9 347.1 L177.8 289.6 L266.7 265.9 L355.6 279.2 L444.4 348.5 L533.3 351.7 L622.2 266.3 L711.1 252.9 L800.0 323.5 L800 500 L0 500 Z" fill="#41232c" opacity="0.65" />
+  <path d="M0.0 378.5 L114.3 389.7 L228.6 376.7 L342.9 329.2 L457.1 368.4 L571.4 406.9 L685.7 407.5 L800.0 364.6 L800 500 L0 500 Z" fill="url(#ground)" />
+  <rect y="392" width="800" height="108" fill="#0c0609" opacity="0.7" />
+
+  <g font-family="Space Grotesk, Inter, sans-serif">
+    <rect x="36" y="34" width="86" height="26" rx="13" fill="#060b18" opacity="0.55" />
+    <text x="79" y="52" fill="#ffb17a" font-size="12" letter-spacing="3" text-anchor="middle">DEMO</text>
+    <text x="40" y="448" fill="#f0f5ff" font-size="30" font-weight="600">Craters of the Moon</text>
+    <text x="40" y="476" fill="#9baec9" font-size="16" letter-spacing="1">United States</text>
   </g>
-  <text x="60" y="80" fill="#35e0f2" font-family="Space Grotesk, sans-serif" font-size="18" letter-spacing="6">DEMO IMAGE</text>
-  <text x="60" y="140" fill="#e8f0ff" font-family="Space Grotesk, sans-serif" font-size="40">Craters of the Moon</text>
-  <text x="60" y="180" fill="#9fb0d0" font-family="Inter, sans-serif" font-size="20">United States</text>
-  <text x="60" y="440" fill="#9fb0d0" font-family="Inter, sans-serif" font-size="16" opacity="0.8">Placeholder — replace with a real photo.</text>
 </svg>

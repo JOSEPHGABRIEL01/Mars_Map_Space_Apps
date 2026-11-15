@@ -1,19 +1,24 @@
 /**
- * Global front-end configuration.
+ * Global front-end configuration for the DEMO prototype.
  *
- * NOTE: Every value in this file is provisional until the Figma design and the
- * backend contract are finalised.
+ * All values are provisional until the backend contract is agreed. The
+ * similarity threshold is intentionally isolated here so it can be changed
+ * without touching the scoring or presentation logic.
  */
 
 /** Extra text shown wherever demo data is displayed. */
 export const DATA_DISCLAIMER =
-  'DEMO DATA — locations, coordinates and similarity scores are placeholders for front-end development and do not represent real scientific results.'
+  'DEMO DATA — planetary features, coordinates and similarity scores are simulated for front-end development and must not be presented as scientific evidence.'
 
-/** Earth map asset. Swap this for the final PNG exported from Figma. */
-export const EARTH_MAP_IMAGE = '/images/earth-map.svg'
-
-/** Width / height ratio of the Earth map image (equirectangular = 2). */
-export const EARTH_MAP_ASPECT_RATIO = 2
-
-/** Artificial delay used by the mock API so loading states can be tested. */
+/** Artificial delay used by the mock services so loading states are visible. */
 export const DEMO_LATENCY_MS = 600
+
+/** Minimum compatibility shown by default (spec: 70%). */
+export const DEFAULT_MINIMUM_SIMILARITY = 70
+
+/** Bounds for the minimum similarity control. */
+export const MINIMUM_SIMILARITY_RANGE = {
+  min: 0,
+  max: 100,
+  step: 1,
+}

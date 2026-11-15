@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Worlds Map — Earth analogs for Moon and Mars regions (NASA Space Apps Challenge).",
+  "description": "Worlds Map — search Moon and Mars features and compare them with Earth analogs (NASA Space Apps Challenge).",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
