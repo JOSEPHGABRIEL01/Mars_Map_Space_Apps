@@ -71,6 +71,12 @@
         <aside id="mission-menu" class="mission-menu" aria-label="Mission target">
           <label for="target-select">Mission target <span>(reference site)</span></label>
           <select id="target-select"></select>
+          <label class="result-limit-label" for="result-limit">Visible analogs</label>
+          <select id="result-limit">
+            <option value="50">Top 50</option>
+            <option value="100">Top 100</option>
+            <option value="all">All places</option>
+          </select>
           <p id="target-note" class="target-note" hidden></p>
           <button type="button" id="custom-target" class="custom">＋ Custom target</button>
           <button type="button" id="ranking-button" class="ranking-button">
@@ -134,9 +140,9 @@
             <label>
               Show
               <select id="ranking-limit">
-                <option value="5">Top 5</option>
-                <option value="10" selected>Top 10</option>
-                <option value="50">All candidates</option>
+                <option value="50" selected>Top 50</option>
+                <option value="100">Top 100</option>
+                <option value="all">All places</option>
               </select>
             </label>
             <span id="ranking-summary" class="muted"></span>

@@ -1391,6 +1391,7 @@ let targets = [],
   baseLayers = null,
   activeBase = null,
   theme = "dark",
+  visibleLimit = "50",
   suppressMarkerClick = false;
 
 const CARTO_API_KEY = "cb1_59bd_1_83c56510fe43619d4f363556";
@@ -1600,7 +1601,7 @@ function initMap() {
 function fitCandidates() {
   if (!map || !ranked.length) return;
 
-  const points = ranked
+  const points = visibleCandidates()
     .slice(0, 12)
     .map((site) => [Number(site.Latitud), Number(site.Longitud)])
     .filter(([lat, lng]) => Number.isFinite(lat) && Number.isFinite(lng));
@@ -1713,7 +1714,8 @@ function renderMarkers() {
 
   markers = L.layerGroup();
 
-  ranked.forEach((site, index) => {
+  const visible = visibleCandidates();
+  visible.forEach((site, index) => {
     const isTop = index < 10;
     const size = isTop ? 14 : 10;
     const icon = L.divIcon({
@@ -1752,6 +1754,10 @@ function renderMarkers() {
   markers.addTo(map);
   updateMarkerSelection();
   refreshMap();
+}
+
+function visibleCandidates() {
+  return visibleLimit === "all" ? ranked : ranked.slice(0, Number(visibleLimit));
 }
 
 function showDetail(site) {
@@ -1818,12 +1824,13 @@ function renderRanking() {
   if (!list) return;
 
   const limitControl = $("#ranking-limit");
-  const limit = Number(limitControl?.value || 10);
+  const requestedLimit = limitControl?.value || "50";
+  const limit = requestedLimit === "all" ? ranked.length : Number(requestedLimit);
   const summary = $("#ranking-summary");
 
   if (summary) {
     const coverage = targetCoverage(activeTarget);
-    summary.textContent = `${ranked.length} candidates · weighted Gaussian distance · ${coverage} of ${PARAM_KEYS.length} reference parameters`;
+    summary.textContent = `${ranked.length} candidates · ${visibleCandidates().length} shown on map · weighted Gaussian distance · ${coverage} of ${PARAM_KEYS.length} reference parameters`;
   }
 
   if (!ranked.length) {
@@ -2210,6 +2217,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("#close-ranking")?.addEventListener("click", () => closeDialog($("#ranking-dialog")));
 
   $("#ranking-limit")?.addEventListener("change", renderRanking);
+
+  $("#result-limit")?.addEventListener("change", (event) => {
+    visibleLimit = event.target.value;
+    renderMarkers();
+    fitCandidates();
+    renderRanking();
+  });
 
   bindRankingList();
 
