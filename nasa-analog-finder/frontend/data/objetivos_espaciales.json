@@ -1,0 +1,62 @@
+[
+  {
+    "Sitio":"South Pole",
+    "Tipo":"OBJETO",
+    "Cuerpo":"Luna",
+    "Latitud":-89.9,
+    "Longitud":0.0,
+    "Temp_Max(C°)":-23,
+    "Temp_Min(C°)":-183,
+    "Amplitud_termica_(Delta_T)":160,
+    "Pendiente°":10.84,
+    "Indice_vegetacion(NDVI)":0,
+    "Polvo\/aerosoles":0.0,
+    "Azufres_Sulfatos":0.0,
+    "Referencias":"NASA LRO LOLA DEM (87.5 deg v4 S Pole) \/ LRO Diviner Lunar Radiometer"
+  },
+  {
+    "Sitio":"Marius hills",
+    "Tipo":"OBJETO",
+    "Cuerpo":"Luna",
+    "Latitud":14.1,
+    "Longitud":-56.8,
+    "Temp_Max(C°)":110,
+    "Temp_Min(C°)":-170,
+    "Amplitud_termica_(Delta_T)":280,
+    "Pendiente°":0.65,
+    "Indice_vegetacion(NDVI)":0,
+    "Polvo\/aerosoles":0.0,
+    "Azufres_Sulfatos":0.0,
+    "Referencias":"NASA LRO LOLA DEM \/ LRO Diviner Lunar Radiometer"
+  },
+  {
+    "Sitio":"Crater Jezero",
+    "Tipo":"OBJETO",
+    "Cuerpo":"Marte",
+    "Latitud":18.38,
+    "Longitud":77.58,
+    "Temp_Max(C°)":-20,
+    "Temp_Min(C°)":-80,
+    "Amplitud_termica_(Delta_T)":60,
+    "Pendiente°":0.85,
+    "Indice_vegetacion(NDVI)":0,
+    "Polvo\/aerosoles":0.55,
+    "Azufres_Sulfatos":1.45,
+    "Referencias":"NASA MGS MOLA Global DEM \/ Mars 2020 Perseverance MEDA & Mastcam-Z"
+  },
+  {
+    "Sitio":"Crater Gale",
+    "Tipo":"OBJETO",
+    "Cuerpo":"Marte",
+    "Latitud":-5.4,
+    "Longitud":137.8,
+    "Temp_Max(C°)":-10,
+    "Temp_Min(C°)":-75,
+    "Amplitud_termica_(Delta_T)":65,
+    "Pendiente°":5.65,
+    "Indice_vegetacion(NDVI)":0,
+    "Polvo\/aerosoles":0.75,
+    "Azufres_Sulfatos":1.75,
+    "Referencias":"NASA MGS MOLA Global DEM \/ MRO HiRISE \/ MSL Curiosity REMS"
+  }
+]

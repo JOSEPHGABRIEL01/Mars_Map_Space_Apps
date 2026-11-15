@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NASA Analog Finder</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="welcome" class="welcome"><div class="welcome-card">
+    <p class="eyebrow">NASA SPACE APPS · ANALOG RESEARCH</p><h1>Where is your mission?</h1>
+    <p class="muted">Explore which places on Earth most closely resemble other worlds.</p>
+    <div class="world-picks"><button class="world-pick" data-world="Luna"><span class="planet moon">☾</span><strong>MOON</strong><small>Shackleton Crater, Marius Hills, and polar/basaltic regions</small></button><button class="world-pick" data-world="Marte"><span class="planet mars">●</span><strong>MARS</strong><small>Jezero Crater, Gale Crater, and sulfate-rich basins</small></button></div>
+  </div></section>
+  <main id="app" class="hidden"><div id="map"></div>
+    <header class="topbar"><div><span class="brand">✦ NASA ANALOG FINDER</span><span id="active-world" class="world-label"></span></div><div class="world-switch"><button data-world="Luna">☾ Moon</button><button data-world="Marte">● Mars</button></div></header>
+    <aside id="mission-menu" class="mission-menu"><label>Mission Target <span>(Reference Site)</span></label><select id="target-select"></select><button id="custom-target" class="custom">＋ Custom Target</button><button id="ranking-button" class="ranking-button">▤ View Analog Ranking</button></aside>
+    <aside id="detail-panel" class="detail-panel"><button id="close-detail" class="close">×</button><div id="detail-content"><p class="muted">Select a marker to view its scientific profile.</p></div></aside>
+    <div class="legend"><span class="pin-dot"></span> Earth analog candidates <span id="candidate-count"></span></div>
+  </main>
+  <dialog id="custom-dialog"><form method="dialog" id="custom-form"><button class="close" value="cancel">×</button><p class="eyebrow">CUSTOM TARGET</p><h2>Define your mission</h2><p class="muted">Empty fields are excluded from the calculation.</p><div id="custom-fields"></div><div class="dialog-actions"><button value="cancel" class="secondary">Cancel</button><button id="apply-custom" value="default" class="primary">Calculate analogs</button></div></form></dialog>
+  <dialog id="ranking-dialog"><section class="ranking-wrap"><button id="close-ranking" class="close">×</button><p class="eyebrow">ANALOG SITE RANKING</p><h2>Most similar Earth environments</h2><div class="ranking-toolbar"><label>Show <select id="ranking-limit"><option value="5">Top 5</option><option value="10" selected>Top 10</option><option value="50">All candidates</option></select></label><span id="ranking-summary" class="muted"></span></div><div id="ranking-list"></div></section></dialog>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script>
+</body></html>
